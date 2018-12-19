@@ -24,12 +24,12 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $quicklink_library = 'quicklink/quicklink_cdn';
   }
 
-  $url_patterns_to_exclude =  ['user/logout']; // Automatically exclude the logout link.
+  $url_patterns_to_ignore =  ['user/logout']; // Automatically ignore the logout link.
   $allowed_domains =  [];
 
-  // Populate and remove line returns from URL patterns to exclude.
-  foreach (explode(PHP_EOL, $config->get('url_patterns_to_exclude')) as $value) {
-    $url_patterns_to_exclude[] = str_replace("\r", '', $value);
+  // Populate and remove line returns from URL patterns to ignore.
+  foreach (explode(PHP_EOL, $config->get('url_patterns_to_ignore')) as $value) {
+    $url_patterns_to_ignore[] = str_replace("\r", '', $value);
   }
 
   // Populate and remove line returns from allowed domains.
@@ -50,8 +50,8 @@ function quicklink_preprocess_html(&$variables, $hook) {
       $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
     }
 
-    if (!empty($url_patterns_to_exclude)) {
-      $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_exclude'] = $url_patterns_to_exclude;
+    if (!empty($url_patterns_to_ignore)) {
+      $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
     }
   }
 }
