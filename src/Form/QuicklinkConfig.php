@@ -53,8 +53,8 @@ class QuicklinkConfig extends ConfigFormBase {
     ];
     $form['allowed_domains'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('Additional Allowed Domains (Optional)'),
-      '#description' => $this->t('List of domains to prefetch from (in addition to origin domain).'),
+      '#title' => $this->t('Specify allowed Domains (Optional)'),
+      '#description' => $this->t('List of domains to prefetch from. If empty, Quicklink will only pull from the origin domain. If you configure this, be sure to input the origin domain.'),
       '#default_value' => $config->get('allowed_domains'),
     ];
     return parent::buildForm($form, $form_state);
