@@ -42,7 +42,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $domain = str_replace("\r", '', $value);
 
     if (!empty($domain)) {
-      $allowed_domains[] = $pattern;
+      $allowed_domains[] = $domain;
     }
   }
 
@@ -52,7 +52,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $url_patterns_to_ignore[] = '/edit'; //@todo make this work with valid links that start with /edit.
   }
 
-  // If user is anonymous OR  if "Prefetch for anonymous users only" is NOT selected, load library, load library.
+  // If user is anonymous OR  if "Prefetch for anonymous users only" is NOT selected, load library.
   if (!$variables["logged_in"] || $config->get('prefetch_for_anonymous_users_onl') == 0) {
     $variables['#attached']['library'][] = $quicklink_library;
     $variables['#attached']['library'][] = 'quicklink/quicklink_init';
