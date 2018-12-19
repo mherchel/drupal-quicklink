@@ -1,0 +1,8 @@
+
+quicklink.quicklink_form:
+  path: '/admin/config/development/performance/quicklink'
+  defaults:
+    _form: '\Drupal\quicklink\Form\QuicklinkForm'
+    _title: 'Quicklink Configuration'
+  requirements:
+    _access: 'TRUE'

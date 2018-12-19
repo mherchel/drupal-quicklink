@@ -1,0 +1,4 @@
+quicklink:
+  js:
+    js/quicklink.js: {}
+    js/quicklink_init.js: {}

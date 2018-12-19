@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains quicklink.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function quicklink_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the quicklink module.
+    case 'help.page.quicklink':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('My Awesome Module') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+function quicklink_preprocess_html(&$variables, $hook) {
+  if (!$variables["logged_in"]) {
+    $variables['#attached']['library'][] = 'quicklink/quicklink';
+  }
+}
