@@ -11,6 +11,9 @@
         quicklinkConfig.ignores.push(uri => uri.includes(pattern));
       }
 
+      // Ignore links that have a noprefetch attribute.
+      quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
+
       quicklinkConfig.el = drupalSettings.quicklink.selector || context;
 
       if (drupalSettings.quicklink.allowed_domains) {
