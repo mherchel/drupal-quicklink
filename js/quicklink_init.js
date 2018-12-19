@@ -6,13 +6,16 @@
       const quicklinkConfig = {};
       quicklinkConfig.ignores = [];
 
-      for (let i = 0; i < drupalSettings.quicklink.url_patterns_to_exclude.length; i++) {
-        let pattern = drupalSettings.quicklink.url_patterns_to_exclude[i];
-        quicklinkConfig.ignores.push(uri => uri.includes(pattern));
+      for (let i = 0; i < drupalSettings.quicklink.url_patterns_to_ignore.length; i++) {
+        let pattern = drupalSettings.quicklink.url_patterns_to_ignore[i];
+
+        if (pattern.length) {
+          quicklinkConfig.ignores.push(uri => uri.includes(pattern));
+        }
       }
 
       // Ignore links that have a noprefetch attribute.
-      quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
+      // quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
 
       quicklinkConfig.el = drupalSettings.quicklink.selector || context;
 
