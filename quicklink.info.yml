@@ -1,5 +1,5 @@
-name: 'quicklink'
+name: 'Quicklink'
 type: module
-description: 'My Awesome Module'
+description: 'Installs Quicklink JS library to prefetch linked pages.'
 core: 8.x
-package: 'Custom'
+package: 'Performance'

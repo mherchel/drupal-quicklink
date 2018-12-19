@@ -1,4 +1,13 @@
-quicklink:
+quicklink_init:
+  js:
+    js/quicklink_init.js: {}
+
+quicklink_cdn:
   js:
     https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js: { type: external, minified: true }
     js/quicklink_init.js: {}
+
+# To be used only when local copy of Quicklink library is detected.
+quicklink_local:
+  js:
+    js/quicklink.umd.js: {}

@@ -25,6 +25,7 @@ function quicklink_help($route_name, RouteMatchInterface $route_match) {
 
 function quicklink_preprocess_html(&$variables, $hook) {
   if (!$variables["logged_in"]) {
-    $variables['#attached']['library'][] = 'quicklink/quicklink';
+    $variables['#attached']['library'][] = 'quicklink/quicklink_cdn';
+    $variables['#attached']['library'][] = 'quicklink/quicklink_init';
   }
 }
