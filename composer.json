@@ -1,7 +1,7 @@
 {
   "name": "drupal/quicklink",
   "type": "drupal-module",
-  "description": "My Awesome Module",
+  "description": "Installs Quicklink JS library to prefetch linked pages.",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
   "homepage": "https://www.drupal.org/project/quicklink",

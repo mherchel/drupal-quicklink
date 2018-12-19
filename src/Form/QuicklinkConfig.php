@@ -45,9 +45,9 @@ class QuicklinkConfig extends ConfigFormBase {
       '#size' => 64,
       '#default_value' => $config->get('selector'),
     ];
-    $form['url_patterns_to_exclude (Optional)'] = [
+    $form['url_patterns_to_exclude'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('URL patterns to exclude'),
+      '#title' => $this->t('URL patterns to exclude (Optional)'),
       '#description' => $this->t('Quicklink will not fetch data if the URL contains any of these patterns. One per line.'),
       '#default_value' => $config->get('url_patterns_to_exclude'),
     ];
@@ -77,7 +77,6 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('selector', $form_state->getValue('selector'))
       ->set('url_patterns_to_exclude', $form_state->getValue('url_patterns_to_exclude'))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
-      ->set('allowed_domains', $form_state->getValue('allowed_domains'))
       ->set('allowed_domains', $form_state->getValue('allowed_domains'))
       ->save();
   }
