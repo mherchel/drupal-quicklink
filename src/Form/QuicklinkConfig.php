@@ -39,7 +39,7 @@ class QuicklinkConfig extends ConfigFormBase {
     ];
     $form['selector'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Selector (Optional)'),
+      '#title' => $this->t('Parent selector (Optional)'),
       '#description' => $this->t('Quicklink will search this CSS selector for URLs to prefetch. Defaults to the whole page.'),
       '#maxlength' => 128,
       '#size' => 64,

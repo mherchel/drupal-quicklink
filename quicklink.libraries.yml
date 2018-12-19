@@ -1,6 +1,8 @@
 quicklink_init:
   js:
     js/quicklink_init.js: {}
+  dependencies:
+  - core/drupalSettings
 
 quicklink_cdn:
   js:
