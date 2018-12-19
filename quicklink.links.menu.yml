@@ -1,6 +1,7 @@
-quicklink.admin:
-  title: 'QuickLink'
-  description: 'Configure the Quicklink library.'
+quicklink.quicklink_config:
+  title: 'Quicklink Configuration'
+  route_name: quicklink.quicklink_config
+  description: 'Quicklink configuration'
   parent: system.admin_config_development
-  route_name: quicklink.quicklink_form
-  weight: 100
+  weight: 99
+
