@@ -40,7 +40,7 @@ class QuicklinkConfig extends ConfigFormBase {
     $form['selector'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Parent selector (Optional)'),
-      '#description' => $this->t('Quicklink will search this CSS selector for URLs to prefetch. Defaults to the whole page.'),
+      '#description' => $this->t('Quicklink will search this CSS selector for URLs to prefetch (ex. <code>.body-inner</code>). Defaults to the whole document.'),
       '#maxlength' => 128,
       '#size' => 64,
       '#default_value' => $config->get('selector'),
@@ -74,7 +74,7 @@ class QuicklinkConfig extends ConfigFormBase {
     parent::submitForm($form, $form_state);
 
     $this->config('quicklink.quicklinkconfig')
-      ->set('selector', $form_state->getValue('selector'))
+      ->set('selector', trim($form_state->getValue('selector')))
       ->set('url_patterns_to_exclude', $form_state->getValue('url_patterns_to_exclude'))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
       ->set('allowed_domains', $form_state->getValue('allowed_domains'))

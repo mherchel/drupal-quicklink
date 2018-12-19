@@ -14,6 +14,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   // Load current configuration.
   $config = \Drupal::config('quicklink.quicklinkconfig');
+  $selector = $config->get('selector');
 
   // Check if local copy of the library exists. If it does not, use the CDN version.
   if (file_exists(drupal_get_path('module', 'quicklink') . '/js/quicklink.umd.js')) {
@@ -40,8 +41,17 @@ function quicklink_preprocess_html(&$variables, $hook) {
   if (!$variables["logged_in"] || $config->get('prefetch_for_anonymous_users_onl') == 0) {
     $variables['#attached']['library'][] = $quicklink_library;
     $variables['#attached']['library'][] = 'quicklink/quicklink_init';
-    $variables['#attached']['drupalSettings']['quicklink']['selector'] = $config->get('selector');
-    $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
-    $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_exclude'] = $url_patterns_to_exclude;
+
+    if (!empty($selector)) {
+      $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
+    }
+
+    if (!empty($allowed_domains[0])) {
+      $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
+    }
+
+    if (!empty($url_patterns_to_exclude)) {
+      $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_exclude'] = $url_patterns_to_exclude;
+    }
   }
 }
