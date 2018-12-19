@@ -1,4 +1,4 @@
 quicklink:
   js:
-    js/quicklink.js: {}
+    https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js: { type: external, minified: true }
     js/quicklink_init.js: {}
