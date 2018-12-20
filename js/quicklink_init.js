@@ -1,34 +1,42 @@
 'use strict';
+
 (function () {
   Drupal.behaviors.quicklink = {
-    'attach': function attachQuicklink(context) {
+    'attach': function attachQuicklink(context, settings) {
 
-      const quicklinkConfig = {};
-      quicklinkConfig.ignores = [];
+      function hydrateQuicklinkConfig() {
+        var quicklinkConfig = {};
+        quicklinkConfig.ignores = [];
 
-      for (let i = 0; i < drupalSettings.quicklink.url_patterns_to_ignore.length; i++) {
-        let pattern = drupalSettings.quicklink.url_patterns_to_ignore[i];
+        // Loop through all the patters to ignore, and generate functions to populate quicklinkConfig.
+        for (var i = 0; i < settings.quicklink.url_patterns_to_ignore.length; i++) {
+          let pattern = settings.quicklink.url_patterns_to_ignore[i];
 
-        if (pattern.length) {
-          quicklinkConfig.ignores.push(uri => uri.includes(pattern));
+          if (pattern.length) {
+            quicklinkConfig.ignores.push(uri => uri.includes(pattern));
+          }
         }
-      }
 
-      // Ignore links that have a noprefetch attribute.
-      quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
+        // Ignore links that have a noprefetch attribute.
+        quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
 
-      // Ignore links that have a download attribute.
-      quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('download'));
+        // Ignore links that have a download attribute.
+        quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('download'));
 
-      quicklinkConfig.el = context;
+        quicklinkConfig.el = context;
 
-      if (drupalSettings.quicklink.selector) {
-        quicklinkConfig.el = context.querySelector(drupalSettings.quicklink.selector);
-      }
+        if (settings.quicklink.selector) {
+          quicklinkConfig.el = context.querySelector(drupalSettings.quicklink.selector);
+        }
 
-      if (drupalSettings.quicklink.allowed_domains) {
+        if (settings.quicklink.allowed_domains) {
           quicklinkConfig.origins = drupalSettings.quicklink.allowed_domains;
+        }
+
+        return quicklinkConfig;
       }
+
+      var quicklinkConfig = quicklinkConfig || hydrateQuicklinkConfig();
 
       if (window.quicklink) {
         quicklink(quicklinkConfig);
