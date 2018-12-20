@@ -46,6 +46,11 @@ function quicklink_preprocess_html(&$variables, $hook) {
     }
   }
 
+  // Check for "Ignore Hashes" option
+  if ($config->get('ignore_hashes') == 1) {
+    $url_patterns_to_ignore[] = '#';
+  }
+
   // If "Ignore admin paths" is selected, ignore the admin paths.
   if ($config->get('ignore_admin_paths') == 1) {
     $url_patterns_to_ignore[] = '/admin';
@@ -65,7 +70,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
       $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
     }
 
-    if (!empty($url_patterns_to_ignore)) {
+    if (!empty($url_patterns_to_ignore[0])) {
       $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
     }
   }

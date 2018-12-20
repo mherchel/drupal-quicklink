@@ -43,6 +43,18 @@ class QuicklinkConfig extends ConfigFormBase {
       '#description' => $this->t('Highly recommended. Ignore administrative paths.'),
       '#default_value' => $config->get('ignore_admin_paths'),
     ];
+    $form['ignore_hashes'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Ignore paths with hashes (#) in them'),
+      '#description' => $this->t('Recommended. Prevents multiple prefetches of the same page.'),
+      '#default_value' => $config->get('ignore_hashes'),
+    ];
+    $form['url_patterns_to_ignore'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('URL patterns to ignore (optional)'),
+      '#description' => $this->t('Quicklink will not fetch data if the URL contains any of these patterns. One per line.'),
+      '#default_value' => $config->get('url_patterns_to_ignore'),
+    ];
     $form['selector'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Override parent selector (optional)'),
@@ -50,12 +62,6 @@ class QuicklinkConfig extends ConfigFormBase {
       '#maxlength' => 128,
       '#size' => 64,
       '#default_value' => $config->get('selector'),
-    ];
-    $form['url_patterns_to_ignore'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('URL patterns to ignore (optional)'),
-      '#description' => $this->t('Quicklink will not fetch data if the URL contains any of these patterns. One per line.'),
-      '#default_value' => $config->get('url_patterns_to_ignore'),
     ];
     $form['allowed_domains'] = [
       '#type' => 'textarea',
@@ -84,6 +90,7 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
+      ->set('ignore_hashes', $form_state->getValue('ignore_hashes'))
       ->set('allowed_domains', trim($form_state->getValue('allowed_domains')))
       ->save();
   }
