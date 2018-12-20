@@ -4,7 +4,7 @@ quicklink.quicklink_config:
     _form: '\Drupal\quicklink\Form\QuicklinkConfig'
     _title: 'Quicklink Configuration'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
 
