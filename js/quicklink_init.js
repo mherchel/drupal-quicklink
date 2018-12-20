@@ -17,6 +17,9 @@
       // Ignore links that have a noprefetch attribute.
       quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
 
+      // Ignore links that have a download attribute.
+      quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('download'));
+
       quicklinkConfig.el = context;
 
       if (drupalSettings.quicklink.selector) {
