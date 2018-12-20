@@ -66,7 +66,8 @@ class QuicklinkConfig extends ConfigFormBase {
     $form['allowed_domains'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Override allowed domains (optional)'),
-      '#description' => $this->t('List of domains to prefetch from. If empty, Quicklink will only prefetch links from the origin domain. If you configure this, be sure to input the origin domain.'),
+      '#description' => $this->t('List of domains to prefetch from. If empty, Quicklink will only prefetch links from the origin domain. 
+        If you configure this, be sure to input the origin domain. Add <code>true</code> here to allow <em>every</em> origin.'),
       '#default_value' => $config->get('allowed_domains'),
     ];
     return parent::buildForm($form, $form_state);
