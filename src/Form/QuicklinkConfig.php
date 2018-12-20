@@ -81,10 +81,10 @@ class QuicklinkConfig extends ConfigFormBase {
 
     $this->config('quicklink.quicklinkconfig')
       ->set('selector', trim($form_state->getValue('selector')))
-      ->set('url_patterns_to_ignore', $form_state->getValue('url_patterns_to_ignore'))
+      ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
-      ->set('allowed_domains', $form_state->getValue('allowed_domains'))
+      ->set('allowed_domains', trim($form_state->getValue('allowed_domains')))
       ->save();
   }
 
