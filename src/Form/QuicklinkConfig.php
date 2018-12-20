@@ -45,7 +45,7 @@ class QuicklinkConfig extends ConfigFormBase {
     ];
     $form['selector'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Parent selector (Optional)'),
+      '#title' => $this->t('Override parent selector (optional)'),
       '#description' => $this->t('Quicklink will search this CSS selector for URLs to prefetch (ex. <code>.body-inner</code>). Defaults to the whole document.'),
       '#maxlength' => 128,
       '#size' => 64,
@@ -53,14 +53,14 @@ class QuicklinkConfig extends ConfigFormBase {
     ];
     $form['url_patterns_to_ignore'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('URL patterns to ignore (Optional)'),
+      '#title' => $this->t('URL patterns to ignore (optional)'),
       '#description' => $this->t('Quicklink will not fetch data if the URL contains any of these patterns. One per line.'),
       '#default_value' => $config->get('url_patterns_to_ignore'),
     ];
     $form['allowed_domains'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('Specify allowed Domains (Optional)'),
-      '#description' => $this->t('List of domains to prefetch from. If empty, Quicklink will only pull from the origin domain. If you configure this, be sure to input the origin domain.'),
+      '#title' => $this->t('Override allowed domains (optional)'),
+      '#description' => $this->t('List of domains to prefetch from. If empty, Quicklink will only prefetch links from the origin domain. If you configure this, be sure to input the origin domain.'),
       '#default_value' => $config->get('allowed_domains'),
     ];
     return parent::buildForm($form, $form_state);
