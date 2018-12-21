@@ -6,15 +6,18 @@
 
       function hydrateQuicklinkConfig() {
         var quicklinkConfig = {};
+
         quicklinkConfig.ignores = [];
 
         // Loop through all the patters to ignore, and generate functions to populate quicklinkConfig.
         for (var i = 0; i < settings.quicklink.url_patterns_to_ignore.length; i++) {
-          let pattern = settings.quicklink.url_patterns_to_ignore[i];
+          var pattern = settings.quicklink.url_patterns_to_ignore[i];
 
-          if (pattern.length) {
-            quicklinkConfig.ignores.push(uri => uri.includes(pattern));
-          }
+          (function(i, pattern) {
+            if (pattern.length) {
+              quicklinkConfig.ignores.push(function(uri) { return uri.includes(pattern) });
+            }
+          })(i, pattern);
         }
 
         // Ignore links that have a noprefetch attribute.
