@@ -22,7 +22,7 @@
           (function(i, pattern) {
             if (pattern.length) {
               quicklinkConfig.ignores.push(function(uri, elem) {
-                var ruleName = 'Pattern found in href';
+                var ruleName = 'Pattern found in href.';
                 var ruleFunc = uri.includes(pattern);
 
                 outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern);
@@ -34,7 +34,7 @@
         }
 
         quicklinkConfig.ignores.push(function(uri, elem) {
-          var ruleName = 'Exists in admin element container';
+          var ruleName = 'Exists in admin element container.';
           var ruleFunc = elem.matches('#block-local-tasks-block a, #drupal-off-canvas a, #toolbar-administration a');
 
           outputDebugInfo(ruleFunc, ruleName, uri, elem);
@@ -43,7 +43,7 @@
         });
 
         quicklinkConfig.ignores.push(function(uri, elem) {
-          var ruleName = 'Contains prefetch attribute';
+          var ruleName = 'Contains prefetch attribute.';
           var ruleFunc = elem.hasAttribute('noprefetch');
 
           outputDebugInfo(ruleFunc, ruleName, uri, elem);
@@ -53,7 +53,7 @@
 
 
         quicklinkConfig.ignores.push(function(uri, elem) {
-          var ruleName = 'Contains download attribute';
+          var ruleName = 'Contains download attribute.';
           var ruleFunc = elem.hasAttribute('download');
 
           outputDebugInfo(ruleFunc, ruleName, uri, elem);
@@ -67,7 +67,7 @@
 
       function outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern) {
         if (debug && ruleFunc) {
-          var debugMessage = 'Ignored because of ' + ruleName + '.';
+          var debugMessage = ruleName + ' Link ignored.';
           var thisLog = {};
           var pattern = pattern || false;
 

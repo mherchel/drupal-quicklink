@@ -31,10 +31,12 @@ function quicklink_preprocess_html(&$variables, $hook) {
   }
   else {
     $quicklink_library = 'quicklink/quicklink_cdn';
-    $debug_log[] = 'Local copy of quicklink library NOT detected. Loading from CDN.';
+    $debug_log[] = 'Local copy of quicklink library NOT detected. Will use to CDN copy.';
   }
 
   $url_patterns_to_ignore =  ['user/logout']; // Always ignore the logout link.
+  $debug_log[] = 'Quicklink will ignore "user/logout" URL pattern.';
+
   $allowed_domains =  [];
 
   // Populate and remove line returns from URL patterns to ignore.
@@ -68,35 +70,35 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
-  // If user is anonymous OR  if "Prefetch for anonymous users only" is NOT selected, load library.
-  if ($variables['logged_in'] && $config->get('prefetch_for_anonymous_users_onl') == 0) {
+  // If user is anonymous AND  if "Prefetch for anonymous users only" is selected, do not load library.
+  if ($variables['logged_in'] && $config->get('prefetch_for_anonymous_users_onl') == 1) {
     $load_library = false;
     $debug_log[] = 'Library not loaded because user is authenticated.';
   }
 
+  $variables['#attached']['library'][] = 'quicklink/quicklink_init';
+  $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
+
+  if (!empty($selector)) {
+    $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
+    $debug_log[] = 'Selector for Quicklink to parse: '. $selector;
+  }
+
+  if (!empty($allowed_domains[0])) {
+    $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
+    $debug_log['allowed_domains'][] = $allowed_domains;
+  }
+
+  if (!empty($url_patterns_to_ignore[0])) {
+    $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
+    $debug_log['url_patterns_to_ignore'][] = $url_patterns_to_ignore;
+  }
 
   if ($load_library) {
     $variables['#attached']['library'][] = $quicklink_library;
-    $variables['#attached']['library'][] = 'quicklink/quicklink_init';
-
-    if (!empty($selector)) {
-      $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
-      $debug_log[] = 'Selector for Quicklink to parse: '. $selector;
-    }
-
-    if (!empty($allowed_domains[0])) {
-      $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
-      $debug_log['allowed_domains'][] = $allowed_domains;
-    }
-
-    if (!empty($url_patterns_to_ignore[0])) {
-      $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
-      $debug_log['url_patterns_to_ignore'][] = $url_patterns_to_ignore;
-    }
   }
 
   if ($debug) {
-    $variables['#attached']['library'][] = 'quicklink/quicklink_init';
     $variables['#attached']['library'][] = 'quicklink/quicklink_debug';
     $variables['#attached']['drupalSettings']['quicklink']['debug'] = true;
     $variables['#attached']['drupalSettings']['quicklink']['debug_log'] = $debug_log;
