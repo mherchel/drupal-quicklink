@@ -4,49 +4,101 @@
   Drupal.behaviors.quicklink = {
     'attach': function attachQuicklink(context, settings) {
 
+      var debug = settings.quicklink.debug;
+
       function hydrateQuicklinkConfig() {
         settings.quicklink.quicklinkConfig = settings.quicklink.quicklinkConfig || {};
+        settings.quicklink.ignoredSelectorsLog = settings.quicklink.ignoredSelectorsLog || [];
 
         var quicklinkConfig = settings.quicklink.quicklinkConfig;
+        var ignoredSelectorsLog = settings.quicklink.ignoredSelectorsLog;
 
         quicklinkConfig.ignores = [];
 
-        // Loop through all the patters to ignore, and generate ES5 functions to populate quicklinkConfig.
+        // Loop through all the patters to ignore, and generate rules to ignore URL patterns.
         for (var i = 0; i < settings.quicklink.url_patterns_to_ignore.length; i++) {
           var pattern = settings.quicklink.url_patterns_to_ignore[i];
 
           (function(i, pattern) {
             if (pattern.length) {
-              quicklinkConfig.ignores.push(function(uri) { return uri.includes(pattern) });
+              quicklinkConfig.ignores.push(function(uri, elem) {
+                var ruleName = 'Pattern found in href';
+                var ruleFunc = uri.includes(pattern);
+
+                outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern);
+
+                return ruleFunc;
+              });
             }
           })(i, pattern);
         }
 
-        // Ignore links that have a noprefetch attribute.
-        quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('noprefetch'));
+        quicklinkConfig.ignores.push(function(uri, elem) {
+          var ruleName = 'Exists in admin element container';
+          var ruleFunc = elem.matches('#block-local-tasks-block a, #drupal-off-canvas a, #toolbar-administration a');
 
-        // Ignore links that have a download attribute.
-        quicklinkConfig.ignores.push((uri, elem) => elem.hasAttribute('download'));
+          outputDebugInfo(ruleFunc, ruleName, uri, elem);
 
-        if (settings.quicklink.selector) {
-          quicklinkConfig.el = context.querySelector(settings.quicklink.selector);
-        }
+          return ruleFunc;
+        });
 
-        if (settings.quicklink.allowed_domains) {
-          quicklinkConfig.origins = settings.quicklink.allowed_domains;
+        quicklinkConfig.ignores.push(function(uri, elem) {
+          var ruleName = 'Contains prefetch attribute';
+          var ruleFunc = elem.hasAttribute('noprefetch');
+
+          outputDebugInfo(ruleFunc, ruleName, uri, elem);
+
+          return ruleFunc;
+        });
+
+
+        quicklinkConfig.ignores.push(function(uri, elem) {
+          var ruleName = 'Contains download attribute';
+          var ruleFunc = elem.hasAttribute('download');
+
+          outputDebugInfo(ruleFunc, ruleName, uri, elem);
+
+          return ruleFunc;
+        });
+
+        quicklinkConfig.el = (settings.quicklink.selector) ? context.querySelector(settings.quicklink.selector) : false;
+        quicklinkConfig.origins = (settings.quicklink.allowed_domains) ? settings.quicklink.allowed_domains : false;
+      }
+
+      function outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern) {
+        if (debug && ruleFunc) {
+          var debugMessage = 'Ignored because of ' + ruleName + '.';
+          var thisLog = {};
+          var pattern = pattern || false;
+
+          elem.classList.add('quicklink-ignore');
+          elem.textContent += '🚫';
+          elem.dataset.quicklinkMatch = debugMessage;
+
+          thisLog.ruleName = ruleName;
+          thisLog.uri = uri;
+          thisLog.elem = elem;
+          thisLog.message = debugMessage;
+          if (pattern) thisLog.pattern = pattern;
+
+          (function(thisLog) {
+            settings.quicklink.ignoredSelectorsLog.push(thisLog);
+          })(thisLog);
         }
       }
 
-      if (!settings.quicklink.quicklinkConfig) {
-        hydrateQuicklinkConfig()
-      }
+      if (!settings.quicklink.quicklinkConfig) hydrateQuicklinkConfig();
 
-      // Update element to context every time Drupal.behaviors is run.
       settings.quicklink.quicklinkConfig.el = context;
 
-      if (window.quicklink) {
-        quicklink(settings.quicklink.quicklinkConfig);
+      if (debug) {
+        console.info('Quicklink config object', settings.quicklink.quicklinkConfig);
+        console.info('Quicklink module debug log', settings.quicklink.debug_log);
+        console.info('Quicklink ignored selectors log', settings.quicklink.ignoredSelectorsLog);
       }
+
+      if (window.quicklink) quicklink(settings.quicklink.quicklinkConfig);
+
     },
   };
 })();

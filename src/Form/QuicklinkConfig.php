@@ -70,6 +70,12 @@ class QuicklinkConfig extends ConfigFormBase {
         If you configure this, be sure to input the origin domain. Add <code>true</code> here to allow <em>every</em> origin.'),
       '#default_value' => $config->get('allowed_domains'),
     ];
+    $form['enable_debug_mode'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable debug mode'),
+      '#description' => $this->t('Tell Quicklink to log development information to the HTML and JavaScript console. Clear Drupal\'s cache after changing this value.'),
+      '#default_value' => $config->get('enable_debug_mode'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -93,6 +99,7 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
       ->set('ignore_hashes', $form_state->getValue('ignore_hashes'))
       ->set('allowed_domains', trim($form_state->getValue('allowed_domains')))
+      ->set('enable_debug_mode', $form_state->getValue('enable_debug_mode'))
       ->save();
   }
 
