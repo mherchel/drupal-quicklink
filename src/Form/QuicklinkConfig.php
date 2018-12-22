@@ -73,7 +73,7 @@ class QuicklinkConfig extends ConfigFormBase {
     $form['enable_debug_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debug mode'),
-      '#description' => $this->t('Tell Quicklink to log development information to the HTML and JavaScript console. Clear Drupal\'s cache after changing this value.'),
+      '#description' => $this->t('Log Quicklink development information to the HTML and JavaScript console. You may need to Drupal\'s cache after changing this value.'),
       '#default_value' => $config->get('enable_debug_mode'),
     ];
     return parent::buildForm($form, $form_state);

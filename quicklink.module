@@ -66,11 +66,11 @@ function quicklink_preprocess_html(&$variables, $hook) {
   // If "Ignore admin paths" is selected, ignore the admin paths.
   if ($config->get('ignore_admin_paths') == 1) {
     $url_patterns_to_ignore[] = '/admin';
-    $url_patterns_to_ignore[] = '/edit'; //@todo make this work with valid links that start with /edit.
+    $url_patterns_to_ignore[] = '/edit';
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
-  // If user is anonymous AND  if "Prefetch for anonymous users only" is selected, do not load library.
+  // If user is anonymous AND if "Prefetch for anonymous users only" is selected, do not load library.
   if ($variables['logged_in'] && $config->get('prefetch_for_anonymous_users_onl') == 1) {
     $load_library = false;
     $debug_log[] = 'Library not loaded because user is authenticated.';

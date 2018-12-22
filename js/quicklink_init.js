@@ -33,14 +33,16 @@
           })(i, pattern);
         }
 
-        quicklinkConfig.ignores.push(function(uri, elem) {
-          var ruleName = 'Exists in admin element container.';
-          var ruleFunc = elem.matches('#block-local-tasks-block a, #drupal-off-canvas a, #toolbar-administration a');
+        if (settings.quicklink.ignore_admin_paths) {
+          quicklinkConfig.ignores.push(function (uri, elem) {
+            var ruleName = 'Exists in admin element container.';
+            var ruleFunc = elem.matches('#block-local-tasks-block a, .block-local-tasks-block a, #drupal-off-canvas a, #toolbar-administration a');
 
-          outputDebugInfo(ruleFunc, ruleName, uri, elem);
+            outputDebugInfo(ruleFunc, ruleName, uri, elem);
 
-          return ruleFunc;
-        });
+            return ruleFunc;
+          });
+        }
 
         quicklinkConfig.ignores.push(function(uri, elem) {
           var ruleName = 'Contains prefetch attribute.';
@@ -98,7 +100,6 @@
       }
 
       if (window.quicklink) quicklink(settings.quicklink.quicklinkConfig);
-
     },
   };
 })();
