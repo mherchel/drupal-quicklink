@@ -78,6 +78,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   $variables['#attached']['library'][] = 'quicklink/quicklink_init';
   $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
+  $variables['#attached']['drupalSettings']['quicklink']['debug'] = $debug;
 
   if (!empty($selector)) {
     $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
@@ -100,7 +101,6 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   if ($debug) {
     $variables['#attached']['library'][] = 'quicklink/quicklink_debug';
-    $variables['#attached']['drupalSettings']['quicklink']['debug'] = true;
     $variables['#attached']['drupalSettings']['quicklink']['debug_log'] = $debug_log;
   }
 }
