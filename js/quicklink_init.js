@@ -53,7 +53,6 @@
           return ruleFunc;
         });
 
-
         quicklinkConfig.ignores.push(function(uri, elem) {
           var ruleName = 'Contains download attribute.';
           var ruleFunc = elem.hasAttribute('download');
@@ -81,6 +80,7 @@
           thisLog.uri = uri;
           thisLog.elem = elem;
           thisLog.message = debugMessage;
+          
           if (pattern) thisLog.pattern = pattern;
 
           (function(thisLog) {
