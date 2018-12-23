@@ -2,76 +2,101 @@
 
 ## What is Quicklink?
 
-The Quicklink module loads the [Quicklink library](https://github.com/GoogleChromeLabs/quicklink) and provides a Drupal
-administrative interface to configure it.
+The Drupal Quicklink module loads the
+[Quicklink library](https://github.com/GoogleChromeLabs/quicklink) and provides
+a Drupal administrative interface to configure it.
+
 
 ## Installation
 
-Install the module like normal. Because of licensing restrictions, the Quicklink JS library cannot be hosted on Drupal.org.
-By default the module will load the Quicklink library from a CDN at `https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js`. 
-If you place a copy of this file into your local filesystem at `/quicklink/js/quicklink.umd.js`, the module will serve this 
-instead.
+
+### Manual Installation
+1. Download the Drupal module and extract it to your modules folder.
+2. Because of licensing restrictions, the Quicklink JavaScript library cannot
+be hosted on Drupal.org.
+
+By default this module will load the Quicklink JavaScript library from a CDN at
+`https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js`.
+
+If you place a copy of this file into your local filesystem at
+`/libraries/quicklink/dist/quicklink.umd.js`, this module will serve the local copy 
+instead of the CDN copy.
+
+
+### Composer (recommended)
+If you manage your site with composer, and would like to install this module
+with it, please verify the following steps. If you used the [Drupal composer
+template](https://github.com/drupal-composer/drupal-project) to setup your
+project, you most likely have this set up already.
+
+1. Add or verify that `asset-packagist` is in the repositories section of your
+composer.json file:
+
+```
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+    }
+```
+
+2. Add or verify that `type:npm-asset`  is in the `extra` > `installer-path` >
+`web/libraries/{$name}` section of your composer.json file:
+
+```
+    "extra": {
+        "installer-paths": {
+            "web/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+        }
+    }
+```
+
+3. Add or verify that you have `npm-asset` in the `extra` > `installer-types`
+section of your composer.json file:
+
+```
+    "installer-types": ["npm-asset", "bower-asset"],
+```
+
+4. Save your composer.json file.
+
+5. Back at the command line, install the library with
+`composer require oomphinc/composer-installers-extender npm-asset/quicklink`
+
+6. Install the module with `composer require drupal/quicklink`
+
+7. Enable the module at `admin/modules` or by running `drush en -y quicklink`
+
 
 ## How do I access the Quicklink admin interface?
 
-The Quicklink module admin interface is located at `admin/config/quicklink/quicklinkconfig`.
+The Quicklink module admin interface is located at
+`admin/config/quicklink/quicklinkconfig`.
+
 
 ## What browsers does this support?
 
-Without polyfills: Chrome, Firefox, Edge, Opera, Android Browser, Samsung Internet.
+Without polyfills:
+Chrome, Firefox, Edge, Opera, Android Browser, Samsung Internet.
 
-With [Intersection Observer polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill): Safari, IE9+
+With [Intersection Observer polyfill]
+(https://github.com/w3c/IntersectionObserver/tree/master/polyfill):
+Safari, IE9+
+
 
 ## How to ignore certain links.
 
-You can tell Quicklink to ignore certain links by adding them into the ignore list at `admin/config/quicklink/quicklinkconfig`.
-In addition, you can add a `noprefetch` attribute onto the `<a>` tag to tell the library not to prefetch this link.
+You can tell Quicklink to ignore certain links by adding them into the ignore
+list at `admin/config/quicklink/quicklinkconfig`.
 
-## Installation via Composer
-
-Add the following into your webroot's `composer.json` file to automatically download the `quicklink.umd.js` file so it 
-can be served from your system's local filesystem.
-
-```
-  "require": {
-    "GoogleChromeLabs/quicklink": "^1.0"
-  },
-  "repositories":[
-    {
-      "type":"composer",
-      "url":"https://packages.drupal.org/8"
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "GoogleChromeLabs/quicklink",
-        "version": "1.0.0",
-        "type": "drupal-library",
-        "dist": {
-          "url": "https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js",
-          "type": "file"
-        }
-      }
-    }
-  ]
-```
-
-You'll need to ensure that the `drupal-library` type is available under the `extras` section of the composer.json. The
-code snippit below assumes that you have your webroot in a `web` subdirectory.
-
-```
-  "extra": {
-    "installer-paths": {
-    "web/core": ["type:drupal-core"],
-    "web/libraries/{$name}": ["type:drupal-library"],
-    "web/modules/contrib/{$name}": ["type:drupal-module"],
-    "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-    "web/themes/contrib/{$name}": ["type:drupal-theme"],
-    "drush/Commands/{$name}": ["type:drupal-drush"]
-    },
-    "patches": {}
-  }   
-```
-
-After your `composer.json` is in order, you can install the library with `composer require GoogleChromeLabs/quicklink`,
-and you can install the Quicklink module with `composer require drupal/quicklink`
+In addition, you can add a `noprefetch` attribute onto the `<a>` tag to tell
+the library not to prefetch this link.
