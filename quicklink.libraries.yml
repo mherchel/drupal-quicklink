@@ -6,7 +6,7 @@ quicklink_init:
 
 quicklink_local:
   js:
-    js/quicklink.umd.js: { weight: -20 }
+    /libraries/quicklink/dist/quicklink.umd.js: { weight: -20 }
 
 # To be used only if local copy of quicklink.umd.js does not exist.
 quicklink_cdn:

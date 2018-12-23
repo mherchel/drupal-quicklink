@@ -16,22 +16,20 @@ function quicklink_preprocess_html(&$variables, $hook) {
   $config = \Drupal::config('quicklink.quicklinkconfig');
   $selector = $config->get('selector');
 
-  // Set debug variable.
+  // Get debug variable.
   $debug = $config->get('enable_debug_mode');
   $debug_log = [];
 
-  // Load the library by default.
+  // Load the library unless we disable later.
   $load_library = true;
 
-  // Check if local copy of the library exists. If it does not, use the CDN version.
-  // @todo Should this go into a different directory? Use the LibrariesAPI module?
-  if (file_exists(drupal_get_path('module', 'quicklink') . '/js/quicklink.umd.js')) {
+  if (file_exists(DRUPAL_ROOT . '/libraries/quicklink/dist/quicklink.umd.js')) {
     $quicklink_library = 'quicklink/quicklink_local';
     $debug_log[] = 'Local copy of quicklink library detected.';
   }
   else {
     $quicklink_library = 'quicklink/quicklink_cdn';
-    $debug_log[] = 'Local copy of quicklink library NOT detected. Will use to CDN copy.';
+    $debug_log[] = 'Local copy of quicklink library NOT detected. Will use CDN copy.';
   }
 
   $url_patterns_to_ignore =  ['user/logout']; // Always ignore the logout link.
