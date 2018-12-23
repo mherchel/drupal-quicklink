@@ -43,6 +43,12 @@ class QuicklinkConfig extends ConfigFormBase {
       '#description' => $this->t('Highly recommended. Ignore administrative paths.'),
       '#default_value' => $config->get('ignore_admin_paths'),
     ];
+    $form['ignore_ajax_links'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Do not prefetch AJAX links'),
+      '#description' => $this->t('Highly recommended. Ignore links that trigger AJAX behavior.'),
+      '#default_value' => $config->get('ignore_ajax_links'),
+    ];
     $form['ignore_hashes'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Ignore paths with hashes (#) in them'),
@@ -79,6 +85,13 @@ class QuicklinkConfig extends ConfigFormBase {
         'style'=>'max-width: 600px;'
       ),
     ];
+    $form['load_polyfill'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Load <em>Intersection Observer</em> polyfill'),
+      '#description' => $this->t('This checkbox will enable loading of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" target="_blank">
+        Intersection Observer</a> polyfill from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in Safari and Microsoft Edge browsers.'),
+      '#default_value' => $config->get('load_polyfill'),
+    ];
     $form['enable_debug_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debug mode'),
@@ -106,8 +119,10 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
+      ->set('ignore_ajax_links', $form_state->getValue('ignore_ajax_links'))
       ->set('ignore_hashes', $form_state->getValue('ignore_hashes'))
       ->set('allowed_domains', trim($form_state->getValue('allowed_domains')))
+      ->set('load_polyfill', $form_state->getValue('load_polyfill'))
       ->set('enable_debug_mode', $form_state->getValue('enable_debug_mode'))
       ->save();
   }

@@ -17,3 +17,7 @@ quicklink_debug:
   css:
     component:
       css/quicklink-debug.css: {}
+
+quicklink_polyfill:
+  js:
+    https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver: { weight: -100, type: external, minified: true }

@@ -76,6 +76,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   $variables['#attached']['library'][] = 'quicklink/quicklink_init';
   $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
+  $variables['#attached']['drupalSettings']['quicklink']['ignore_ajax_links'] = $config->get('ignore_ajax_links');
   $variables['#attached']['drupalSettings']['quicklink']['debug'] = $debug;
 
   if (!empty($selector)) {
@@ -94,6 +95,11 @@ function quicklink_preprocess_html(&$variables, $hook) {
   }
 
   if ($load_library) {
+    if ($config->get('load_polyfill') == 1) {
+      $variables['#attached']['library'][] = 'quicklink/quicklink_polyfill';
+      $debug_log[] = 'Intersection Observer polyfill library loaded';
+    }
+
     $variables['#attached']['library'][] = $quicklink_library;
   }
 

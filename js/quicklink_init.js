@@ -44,6 +44,26 @@
           });
         }
 
+        if (settings.quicklink.ignore_ajax_links) {
+          quicklinkConfig.ignores.push(function (uri, elem) {
+            var ruleName = 'Link has "use-ajax" CSS class.';
+            var ruleFunc = elem.classList.contains('use-ajax');
+
+            outputDebugInfo(ruleFunc, ruleName, uri, elem);
+
+            return ruleFunc;
+          });
+
+          quicklinkConfig.ignores.push(function (uri, elem) {
+            var ruleName = 'Link has "/ajax" in url.';
+            var ruleFunc = uri.includes('/ajax');
+
+            outputDebugInfo(ruleFunc, ruleName, uri, elem);
+
+            return ruleFunc;
+          });
+        }
+
         quicklinkConfig.ignores.push(function(uri, elem) {
           var ruleName = 'Contains prefetch attribute.';
           var ruleFunc = elem.hasAttribute('noprefetch');
