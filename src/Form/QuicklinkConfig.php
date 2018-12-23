@@ -55,6 +55,13 @@ class QuicklinkConfig extends ConfigFormBase {
       '#description' => $this->t('Recommended. Prevents multiple prefetches of the same page.'),
       '#default_value' => $config->get('ignore_hashes'),
     ];
+    $form['ignore_file_ext'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Ignore paths with file extensions'),
+      '#description' => $this->t('Recommended. This will ignore links that end with a file extension.
+        It will match strings ending with a period followed by 1-4 characters.'),
+      '#default_value' => $config->get('ignore_file_ext'),
+    ];
     $form['url_patterns_to_ignore'] = [
       '#type' => 'textarea',
       '#title' => $this->t('URL patterns to ignore (optional)'),
@@ -121,6 +128,7 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
       ->set('ignore_ajax_links', $form_state->getValue('ignore_ajax_links'))
       ->set('ignore_hashes', $form_state->getValue('ignore_hashes'))
+      ->set('ignore_file_ext', $form_state->getValue('ignore_file_ext'))
       ->set('allowed_domains', trim($form_state->getValue('allowed_domains')))
       ->set('load_polyfill', $form_state->getValue('load_polyfill'))
       ->set('enable_debug_mode', $form_state->getValue('enable_debug_mode'))

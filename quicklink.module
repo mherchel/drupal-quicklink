@@ -68,7 +68,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
-  // If user is anonymous AND if "Prefetch for anonymous users only" is selected, do not load library.
+  // If user is logged in AND "Prefetch for anonymous users only" is selected, do not load library.
   if ($variables['logged_in'] && $config->get('prefetch_for_anonymous_users_onl') == 1) {
     $load_library = false;
     $debug_log[] = 'Library not loaded because user is authenticated.';
@@ -77,6 +77,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
   $variables['#attached']['library'][] = 'quicklink/quicklink_init';
   $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
   $variables['#attached']['drupalSettings']['quicklink']['ignore_ajax_links'] = $config->get('ignore_ajax_links');
+  $variables['#attached']['drupalSettings']['quicklink']['ignore_file_ext'] = $config->get('ignore_file_ext');
   $variables['#attached']['drupalSettings']['quicklink']['debug'] = $debug;
 
   if (!empty($selector)) {

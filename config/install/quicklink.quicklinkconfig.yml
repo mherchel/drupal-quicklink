@@ -1,5 +1,5 @@
 prefetch_for_anonymous_users_onl: 1
-url_patterns_to_ignore: ".zip\r\n.gz\r\n.mp3\r\n.mp4\r\n.pdf\r\n.ppt\r\n.doc\r\n.xls\r\n.docx\r\n.pptx\r\n.xlsx\r\n.csv"
 ignore_admin_paths: 1
 ignore_hashes: 1
 ignore_ajax_links: 1
+ignore_file_ext: 1
