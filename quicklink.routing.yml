@@ -7,4 +7,3 @@ quicklink.quicklink_config:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
-

@@ -4,4 +4,3 @@ quicklink.quicklink_config:
   description: 'Quicklink configuration'
   parent: system.admin_config_development
   weight: 99
-

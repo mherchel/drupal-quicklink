@@ -80,7 +80,7 @@
           thisLog.uri = uri;
           thisLog.elem = elem;
           thisLog.message = debugMessage;
-          
+
           if (pattern) thisLog.pattern = pattern;
 
           (function(thisLog) {
