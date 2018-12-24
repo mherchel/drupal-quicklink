@@ -71,7 +71,7 @@
 
             outputDebugInfo(ruleFunc, ruleName, uri, elem);
 
-            return ruleFunc; 
+            return ruleFunc;
           });
         }
 
@@ -93,7 +93,6 @@
           return ruleFunc;
         });
 
-        quicklinkConfig.el = (settings.quicklink.selector) ? context.querySelector(settings.quicklink.selector) : false;
         quicklinkConfig.origins = (settings.quicklink.allowed_domains) ? settings.quicklink.allowed_domains : false;
       }
 
@@ -122,7 +121,7 @@
 
       if (!settings.quicklink.quicklinkConfig) hydrateQuicklinkConfig();
 
-      settings.quicklink.quicklinkConfig.el = context;
+      settings.quicklink.quicklinkConfig.el = (settings.quicklink.selector) ? context.querySelector(settings.quicklink.selector) : context;
 
       if (debug) {
         console.info('Quicklink config object', settings.quicklink.quicklinkConfig);
