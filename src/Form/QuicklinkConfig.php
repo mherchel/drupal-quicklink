@@ -134,5 +134,4 @@ class QuicklinkConfig extends ConfigFormBase {
       ->set('enable_debug_mode', $form_state->getValue('enable_debug_mode'))
       ->save();
   }
-
 }

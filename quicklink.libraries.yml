@@ -11,7 +11,7 @@ quicklink_local:
 # To be used only if local copy of quicklink.umd.js does not exist.
 quicklink_cdn:
   js:
-    https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js: { weight: -10, type: external, minified: true }
+    https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js: { weight: -20, type: external, minified: true }
 
 quicklink_debug:
   css:
