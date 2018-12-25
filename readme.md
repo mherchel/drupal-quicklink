@@ -80,17 +80,16 @@ section of your composer.json file:
 ## How do I access the Quicklink admin interface?
 
 The Quicklink module admin interface is located at
-`admin/config/quicklink/quicklinkconfig`.
+`admin/config/quicklink`.
 
 
 ## What browsers does this support?
 
 Without polyfills:
-Chrome, Firefox, Edge, Opera, Android Browser, Samsung Internet.
+Chrome, Firefox.
 
-With [Intersection Observer polyfill]
-(https://github.com/w3c/IntersectionObserver/tree/master/polyfill):
-Safari, IE9+
+With [Intersection Observer polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill):
+Safari, Edge
 
 
 ## How to ignore certain links.
