@@ -22,7 +22,7 @@
           (function(i, pattern) {
             if (pattern.length) {
               quicklinkConfig.ignores.push(function(uri, elem) {
-                var ruleName = 'Pattern found in href.';
+                var ruleName = 'Pattern found in href. See ignored selectors log.';
                 var ruleFunc = uri.includes(pattern);
 
                 outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern);
