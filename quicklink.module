@@ -87,7 +87,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   // If user is logged in AND "Prefetch for anonymous users only" is selected,
   // do not load library.
-  if ($variables['logged_in'] && $config->get('prefetch_for_anonymous_users_onl') == 1) {
+  if ($variables['logged_in'] && $config->get('no_load_when_authenticated') == 1) {
     $load_library = FALSE;
     $debug_log[] = 'Library not loaded because user is authenticated.';
   }

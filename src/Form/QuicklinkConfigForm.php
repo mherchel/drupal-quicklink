@@ -117,11 +117,11 @@ class QuicklinkConfigForm extends ConfigFormBase {
       '#group' => 'settings',
     ];
 
-    $form['when_load_library']['prefetch_for_anonymous_users_onl'] = [
+    $form['when_load_library']['no_load_when_authenticated'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Prefetch for anonymous users only'),
       '#description' => $this->t('Highly recommended. Quicklink library will not be loaded for authenticated users.'),
-      '#default_value' => $config->get('prefetch_for_anonymous_users_onl'),
+      '#default_value' => $config->get('no_load_when_authenticated'),
     ];
 
     $form['when_load_library']['no_load_when_session'] = [
@@ -198,7 +198,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
       ->set('no_load_content_types', $form_state->getValue('no_load_content_types'))
       ->set('selector', trim($form_state->getValue('selector')))
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
-      ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
+      ->set('no_load_when_authenticated', $form_state->getValue('no_load_when_authenticated'))
       ->set('no_load_when_session', $form_state->getValue('no_load_when_session'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
       ->set('ignore_ajax_links', $form_state->getValue('ignore_ajax_links'))
