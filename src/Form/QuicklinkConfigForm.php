@@ -45,12 +45,6 @@ class QuicklinkConfigForm extends ConfigFormBase {
       '#description' => $this->t('On this tab, specify what Quicklink should not prefetch.'),
       '#group' => 'settings',
     ];
-    $form['ignore']['prefetch_for_anonymous_users_onl'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Prefetch for anonymous users only'),
-      '#description' => $this->t('Highly recommended. Only prefetch URLs for anonymous users.'),
-      '#default_value' => $config->get('prefetch_for_anonymous_users_onl'),
-    ];
     $form['ignore']['ignore_admin_paths'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Do not prefetch admin paths'),
@@ -86,19 +80,6 @@ class QuicklinkConfigForm extends ConfigFormBase {
       ],
     ];
 
-    $options = [];
-    $types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
-    foreach ($types as $type) {
-      $options[$type->id()] = $type->label();
-    }
-    $ignored_types = !empty($config->get('ignored_content_types')) ? $config->get('ignored_content_types') : [];
-    $form['ignore']['ignored_content_types'] = [
-      '#title' => $this->t('Ignored content types'),
-      '#type' => 'checkboxes',
-      '#options' => $options,
-      '#default_value' => $ignored_types,
-    ];
-
     // Overrides tab.
     $form['overrides'] = [
       '#type' => 'details',
@@ -126,6 +107,34 @@ class QuicklinkConfigForm extends ConfigFormBase {
       '#attributes' => [
         'style' => 'max-width: 600px;',
       ],
+    ];
+
+    // When to Prefetch tab.
+    $form['when_prefetch'] = [
+      '#type' => 'details',
+      '#title' => $this->t('When to Prefetch'),
+      '#description' => $this->t('On this tab, specify when the Quicklink library will be loaded.'),
+      '#group' => 'settings',
+    ];
+
+    $form['when_prefetch']['prefetch_for_anonymous_users_onl'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Prefetch for anonymous users only'),
+      '#description' => $this->t('Highly recommended. Only prefetch URLs for anonymous users. Library will not be loaded for authenticated users.'),
+      '#default_value' => $config->get('prefetch_for_anonymous_users_onl'),
+    ];
+
+    $options = [];
+    $types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
+    foreach ($types as $type) {
+      $options[$type->id()] = $type->label();
+    }
+    $ignored_types = !empty($config->get('ignored_content_types')) ? $config->get('ignored_content_types') : [];
+    $form['when_prefetch']['ignored_content_types'] = [
+      '#title' => $this->t('Ignored content types'),
+      '#type' => 'checkboxes',
+      '#options' => $options,
+      '#default_value' => $ignored_types,
     ];
 
     // Polyfill tab.
