@@ -110,17 +110,17 @@ class QuicklinkConfigForm extends ConfigFormBase {
     ];
 
     // When to Prefetch tab.
-    $form['when_prefetch'] = [
+    $form['when_load_library'] = [
       '#type' => 'details',
-      '#title' => $this->t('When to Prefetch'),
+      '#title' => $this->t('When to Load Library'),
       '#description' => $this->t('On this tab, specify when the Quicklink library will be loaded.'),
       '#group' => 'settings',
     ];
 
-    $form['when_prefetch']['prefetch_for_anonymous_users_onl'] = [
+    $form['when_load_library']['prefetch_for_anonymous_users_onl'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Prefetch for anonymous users only'),
-      '#description' => $this->t('Highly recommended. Only prefetch URLs for anonymous users. Library will not be loaded for authenticated users.'),
+      '#description' => $this->t('Highly recommended. Library will not be loaded for authenticated users.'),
       '#default_value' => $config->get('prefetch_for_anonymous_users_onl'),
     ];
 
@@ -129,9 +129,9 @@ class QuicklinkConfigForm extends ConfigFormBase {
     foreach ($types as $type) {
       $options[$type->id()] = $type->label();
     }
-    $ignored_types = !empty($config->get('ignored_content_types')) ? $config->get('ignored_content_types') : [];
-    $form['when_prefetch']['ignored_content_types'] = [
-      '#title' => $this->t('Ignored content types'),
+    $ignored_types = !empty($config->get('no_load_content_types')) ? $config->get('no_load_content_types') : [];
+    $form['when_load_library']['no_load_content_types'] = [
+      '#title' => $this->t('Do not load library on these content types:'),
       '#type' => 'checkboxes',
       '#options' => $options,
       '#default_value' => $ignored_types,
@@ -182,7 +182,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
 
     $this->config('quicklink.settings')
-      ->set('ignored_content_types', $form_state->getValue('ignored_content_types'))
+      ->set('no_load_content_types', $form_state->getValue('no_load_content_types'))
       ->set('selector', trim($form_state->getValue('selector')))
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))

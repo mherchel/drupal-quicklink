@@ -75,12 +75,12 @@ function quicklink_preprocess_html(&$variables, $hook) {
   if (!empty($node)) {
     $node_type = $node->bundle();
     $config = \Drupal::config('quicklink.settings');
-    $ignored_content_types = !empty($config->get('ignored_content_types')) ? $config->get('ignored_content_types') : FALSE;
+    $no_load_content_types = !empty($config->get('no_load_content_types')) ? $config->get('no_load_content_types') : FALSE;
 
-    if (is_array($ignored_content_types)) {
-      if (in_array($node_type, $ignored_content_types)) {
+    if (is_array($no_load_content_types)) {
+      if (in_array($node_type, $no_load_content_types)) {
         $load_library = FALSE;
-        $debug_log[] = 'Library not loaded because content type ' . $node_type . ' is ignored.';
+        $debug_log[] = 'Library not loaded because content type "' . $node_type . '" is specified to not load library.';
       }
     }
   }
