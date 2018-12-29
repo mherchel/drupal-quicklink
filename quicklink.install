@@ -18,3 +18,13 @@ function quicklink_uninstall() {
     ->getEditable('quicklink.settings')
     ->delete();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function quicklink_update_8501() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('quicklink.settings');
+  $config->set('no_load_when_authenticated', $config->get('prefetch_for_anonymous_users_onl'));
+  $config->save(TRUE);
+}
