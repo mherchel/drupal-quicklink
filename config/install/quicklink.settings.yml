@@ -1,5 +1,5 @@
 prefetch_for_anonymous_users_onl: 1
-ignore_prefetch_session: 0
+no_load_when_session: 0
 ignore_admin_paths: 1
 ignore_hashes: 1
 ignore_ajax_links: 1

@@ -124,11 +124,11 @@ class QuicklinkConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('prefetch_for_anonymous_users_onl'),
     ];
 
-    $form['when_load_library']['ignore_prefetch_session'] = [
+    $form['when_load_library']['no_load_when_session'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Do not prefetch during sessions'),
       '#description' => $this->t('Recommended. Disables loading of the Quicklink library when a PHP session has been started. Useful for modules that use sessions (e.g. Drupal Commerce shopping carts).'),
-      '#default_value' => $config->get('ignore_prefetch_session'),
+      '#default_value' => $config->get('no_load_when_session'),
     ];
 
     $options = [];
@@ -199,7 +199,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
       ->set('selector', trim($form_state->getValue('selector')))
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
       ->set('prefetch_for_anonymous_users_onl', $form_state->getValue('prefetch_for_anonymous_users_onl'))
-      ->set('ignore_prefetch_session', $form_state->getValue('ignore_prefetch_session'))
+      ->set('no_load_when_session', $form_state->getValue('no_load_when_session'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
       ->set('ignore_ajax_links', $form_state->getValue('ignore_ajax_links'))
       ->set('ignore_hashes', $form_state->getValue('ignore_hashes'))
