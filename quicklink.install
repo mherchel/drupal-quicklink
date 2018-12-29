@@ -20,11 +20,23 @@ function quicklink_uninstall() {
 }
 
 /**
- * Implements hook_update_N().
+ * Migrate Quicklink config settings to new namespace.
  */
 function quicklink_update_8501() {
   $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('quicklink.settings');
-  $config->set('no_load_when_authenticated', $config->get('prefetch_for_anonymous_users_onl'));
-  $config->save(TRUE);
+  $old_config = $config_factory->getEditable('quicklink.quicklinkconfig');
+  $new_config = $config_factory->getEditable('quicklink.settings');
+  $new_config
+    ->set('no_load_when_authenticated',$old_config->get('prefetch_for_anonymous_users_onl'))
+    ->set('selector', $old_config->get('selector'))
+    ->set('url_patterns_to_ignore', trim($old_config->get('url_patterns_to_ignore')))
+    ->set('ignore_admin_paths', $old_config->get('ignore_admin_paths'))
+    ->set('ignore_ajax_links', $old_config->get('ignore_ajax_links'))
+    ->set('ignore_hashes', $old_config->get('ignore_hashes'))
+    ->set('ignore_file_ext', $old_config->get('ignore_file_ext'))
+    ->set('allowed_domains', $old_config->get('allowed_domains'))
+    ->set('load_polyfill', $old_config->get('load_polyfill'))
+    ->save();
+
+  $old_config->delete();
 }
