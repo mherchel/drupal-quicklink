@@ -165,6 +165,12 @@ class QuicklinkConfigForm extends ConfigFormBase {
       '#description' => $this->t("Log Quicklink development information to the HTML and JavaScript console. You may need to Drupal's cache after changing this value."),
       '#default_value' => $config->get('enable_debug_mode'),
     ];
+
+    if ($this->config('quicklink.settings')->get('enable_debug_mode')) {
+      $messenger = \Drupal::messenger();
+      $messenger->addMessage('Quicklink debug mode enabled. Be sure to disable this on production.', $messenger::TYPE_WARNING);
+    }
+
     return parent::buildForm($form, $form_state);
   }
 
