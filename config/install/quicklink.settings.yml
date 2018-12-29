@@ -4,3 +4,4 @@ ignore_admin_paths: 1
 ignore_hashes: 1
 ignore_ajax_links: 1
 ignore_file_ext: 1
+load_polyfill: 1
