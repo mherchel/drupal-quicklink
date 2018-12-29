@@ -92,6 +92,16 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $debug_log[] = 'Library not loaded because user is authenticated.';
   }
 
+  // Disable the library when a session is started.
+  if ($config->get('ignore_prefetch_session')) {
+    /** @var \Drupal\Core\Session\SessionManager $session */
+    $session = \Drupal::getContainer()->get('session_manager');
+    if (!empty($session) && $session->isStarted()) {
+      $load_library = false;
+      $debug_log[] = 'Library not loaded because PHP session is started.';
+    }
+  }
+
   $variables['#attached']['library'][] = 'quicklink/quicklink_init';
   $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
   $variables['#attached']['drupalSettings']['quicklink']['ignore_ajax_links'] = $config->get('ignore_ajax_links');
