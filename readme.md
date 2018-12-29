@@ -80,7 +80,8 @@ section of your composer.json file:
 ## How do I access the Quicklink admin interface?
 
 The Quicklink module admin interface is located at
-`admin/config/quicklink`.
+`admin/config/development/performance/quicklink`, and can be accessed from a tab on the development
+/ performance settings page.
 
 
 ## What browsers does this support?
