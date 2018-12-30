@@ -9,11 +9,7 @@
   * Implements hook_uninstall().
   */
 function quicklink_uninstall() {
-  // Delete 'old' config.
-  \Drupal::service('config.factory')
-    ->getEditable('quicklink.quicklink_config')
-    ->delete();
-  // Delete 'new' config.
+  // Delete config.
   \Drupal::service('config.factory')
     ->getEditable('quicklink.settings')
     ->delete();
