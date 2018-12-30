@@ -1,5 +1,5 @@
 no_load_when_authenticated: 1
-no_load_when_session: 0
+no_load_when_session: 1
 ignore_admin_paths: 1
 ignore_hashes: 1
 ignore_ajax_links: 1
