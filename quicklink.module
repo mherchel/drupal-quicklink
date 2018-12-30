@@ -74,7 +74,6 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   if (!empty($node)) {
     $node_type = $node->bundle();
-    $config = \Drupal::config('quicklink.settings');
     $no_load_content_types = !empty($config->get('no_load_content_types')) ? $config->get('no_load_content_types') : FALSE;
 
     if (is_array($no_load_content_types)) {
