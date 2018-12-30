@@ -96,7 +96,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
     /** @var \Drupal\Core\Session\SessionManager $session */
     $session = \Drupal::getContainer()->get('session_manager');
     if (!empty($session) && $session->isStarted()) {
-      $load_library = false;
+      $load_library = FALSE;
       $debug_log[] = 'Library not loaded because PHP session is started.';
     }
   }
