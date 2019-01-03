@@ -94,6 +94,7 @@
         });
 
         quicklinkConfig.origins = (settings.quicklink.allowed_domains) ? settings.quicklink.allowed_domains : false;
+        quicklinkConfig.urls = (settings.quicklink.prefetch_only_paths) ? settings.quicklink.prefetch_only_paths : false;
       }
 
       function outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern) {
