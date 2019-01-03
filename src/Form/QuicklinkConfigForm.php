@@ -108,6 +108,15 @@ class QuicklinkConfigForm extends ConfigFormBase {
         'style' => 'max-width: 600px;',
       ],
     ];
+    $form['overrides']['prefetch_only_paths'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Prefetch these paths only (overrides everything else)'),
+      '#description' => $this->t('If enabled, will override other settings. <strong>Only these paths will be prefetched.</strong> Include the forward slash at the beginning of the path.'),
+      '#default_value' => $config->get('prefetch_only_paths'),
+      '#attributes' => [
+        'style' => 'max-width: 600px;',
+      ],
+    ];
 
     // When to Prefetch tab.
     $form['when_load_library'] = [
@@ -198,6 +207,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
       ->set('no_load_content_types', $form_state->getValue('no_load_content_types'))
       ->set('selector', trim($form_state->getValue('selector')))
       ->set('url_patterns_to_ignore', trim($form_state->getValue('url_patterns_to_ignore')))
+      ->set('prefetch_only_paths', trim($form_state->getValue('prefetch_only_paths')))
       ->set('no_load_when_authenticated', $form_state->getValue('no_load_when_authenticated'))
       ->set('no_load_when_session', $form_state->getValue('no_load_when_session'))
       ->set('ignore_admin_paths', $form_state->getValue('ignore_admin_paths'))
