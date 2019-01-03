@@ -70,6 +70,15 @@ function quicklink_preprocess_html(&$variables, $hook) {
     }
   }
 
+  // Populate and remove line returns from "Prefetch these paths only".
+  foreach (explode(PHP_EOL, $config->get('prefetch_only_paths')) as $value) {
+    $path = str_replace("\r", '', $value);
+
+    if (!empty($path)) {
+      $prefetch_only_paths[] = $path;
+    }
+  }
+
   // Check for "Ignore Hashes" option.
   if ($config->get('ignore_hashes') == 1) {
     $url_patterns_to_ignore[] = '#';
@@ -121,6 +130,11 @@ function quicklink_preprocess_html(&$variables, $hook) {
   $variables['#attached']['drupalSettings']['quicklink']['ignore_file_ext'] = $config->get('ignore_file_ext');
   $variables['#attached']['drupalSettings']['quicklink']['debug'] = $debug;
 
+  if (!empty($url_patterns_to_ignore[0])) {
+    $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
+    $debug_log['url_patterns_to_ignore'][] = $url_patterns_to_ignore;
+  }
+
   if (!empty($selector)) {
     $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
     $debug_log[] = 'Selector for Quicklink to parse: ' . $selector;
@@ -131,9 +145,9 @@ function quicklink_preprocess_html(&$variables, $hook) {
     $debug_log['allowed_domains'][] = $allowed_domains;
   }
 
-  if (!empty($url_patterns_to_ignore[0])) {
-    $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
-    $debug_log['url_patterns_to_ignore'][] = $url_patterns_to_ignore;
+  if (!empty($prefetch_only_paths[0])) {
+    $variables['#attached']['drupalSettings']['quicklink']['prefetch_only_paths'] = $prefetch_only_paths;
+    $debug_log['prefetch_only_paths'][] = $prefetch_only_paths;
   }
 
   if ($load_library) {
