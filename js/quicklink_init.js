@@ -120,6 +120,17 @@
         }
       }
 
+      function loadQuicklink() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var noprefetch = urlParams.get('noprefetch') !== null;
+
+        if (noprefetch && debug) {
+          console.info('The "noprefetch" parameter exists in the URL querystring. Quicklink library not loaded.');
+        }
+
+        return window.quicklink && !noprefetch;
+      }
+
       if (!settings.quicklink.quicklinkConfig) hydrateQuicklinkConfig();
 
       settings.quicklink.quicklinkConfig.el = (settings.quicklink.selector) ? context.querySelector(settings.quicklink.selector) : context;
@@ -130,7 +141,7 @@
         console.info('Quicklink ignored selectors log', settings.quicklink.ignoredSelectorsLog);
       }
 
-      if (window.quicklink) quicklink(settings.quicklink.quicklinkConfig);
+      if (loadQuicklink()) quicklink(settings.quicklink.quicklinkConfig);
     },
   };
 })();
