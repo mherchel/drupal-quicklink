@@ -145,12 +145,11 @@ class QuicklinkConfigForm extends ConfigFormBase {
     foreach ($types as $type) {
       $options[$type->id()] = $type->label();
     }
-    $ignored_types = !empty($config->get('no_load_content_types')) ? $config->get('no_load_content_types') : [];
     $form['when_load_library']['no_load_content_types'] = [
       '#title' => $this->t('Do not load library on these content types:'),
       '#type' => 'checkboxes',
       '#options' => $options,
-      '#default_value' => $ignored_types,
+      '#default_value' => $config->get('no_load_content_types'),
     ];
 
     // Polyfill tab.

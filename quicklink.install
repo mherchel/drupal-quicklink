@@ -36,3 +36,16 @@ function quicklink_update_8501() {
 
   $old_config->delete();
 }
+
+/**
+ * Set default setting for existing sites.
+ */
+function quicklink_update_8502() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('quicklink.settings');
+  $no_load_content_types = $config->get('no_load_content_types');
+  // Only re-save the config if there is no pre-existing value.
+  if (!isset($no_load_content_types)) {
+    $config->set('no_load_content_types', [])->save();
+  }
+}
