@@ -2,5 +2,5 @@ name: 'Quicklink'
 type: module
 description: 'Installs Quicklink JS library to prefetch linked pages.'
 core: 8.x
-package: 'Performance'
+package: 'Performance and Scalability'
 configure: quicklink.settings
