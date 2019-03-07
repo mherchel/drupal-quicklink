@@ -19,8 +19,8 @@ By default this module will load the Quicklink JavaScript library from a CDN at
 `https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js`.
 
 If you place a copy of this file into your local filesystem at
-`/libraries/quicklink/dist/quicklink.umd.js`, this module will serve the local copy 
-instead of the CDN copy.
+`/libraries/quicklink/dist/quicklink.umd.js`, this module will serve the local 
+copy instead of the CDN copy.
 
 
 ### COMPOSER (RECOMMENDED)
@@ -80,8 +80,8 @@ section of your composer.json file:
 ## CONFIGURATION
 
 The Quicklink module admin interface is located at
-`admin/config/development/performance/quicklink`, and can be accessed from a tab on the development
-/ performance settings page.
+`admin/config/development/performance/quicklink`, and can be accessed from a tab on the 
+development / performance settings page.
 
 After enabling, the Quicklink module will work properly for most sites. The options and descriptions within the
 configuration form should be self-explanatory. However, 
