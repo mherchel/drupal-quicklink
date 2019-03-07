@@ -18,7 +18,7 @@ function quicklink_library_info_build() {
       'js' => [
         '/libraries/quicklink/dist/quicklink.umd.js' => [
           'minified' => TRUE,
-          'weight' => -20
+          'weight' => -20,
         ],
       ],
     ];
@@ -29,7 +29,7 @@ function quicklink_library_info_build() {
         'https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js' => [
           'minified' => TRUE,
           'type' => 'external',
-          'weight' => -20
+          'weight' => -20,
         ],
       ],
     ];

@@ -1,6 +1,6 @@
 (function () {
 
-  "use strict";
+  'use strict';
 
   Drupal.behaviors.quicklink = {
     attach: function attachQuicklink(context, settings) {
