@@ -1,5 +1,7 @@
 (function () {
 
+  "use strict";
+
   Drupal.behaviors.quicklink = {
     attach: function attachQuicklink(context, settings) {
       var debug = settings.quicklink.debug;
@@ -146,6 +148,6 @@
       if (loadQuicklink()) {
         quicklink(settings.quicklink.quicklinkConfig);
       }
-    },
+    }
   };
 })();
