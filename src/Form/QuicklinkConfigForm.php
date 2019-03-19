@@ -18,7 +18,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-   protected $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * Constructs a QuicklinkConfigForm object.
