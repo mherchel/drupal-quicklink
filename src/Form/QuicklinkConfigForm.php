@@ -4,11 +4,44 @@ namespace Drupal\quicklink\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class QuicklinkConfig.
  */
 class QuicklinkConfigForm extends ConfigFormBase {
+
+  /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+   protected $entityTypeManager;
+
+  /**
+   * Constructs a QuicklinkConfigForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($config_factory);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -141,7 +174,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
     ];
 
     $options = [];
-    $types = \Drupal::entityTypeManager()->getStorage('node_type')->loadMultiple();
+    $types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
     foreach ($types as $type) {
       $options[$type->id()] = $type->label();
     }
@@ -182,8 +215,7 @@ class QuicklinkConfigForm extends ConfigFormBase {
     ];
 
     if ($this->config('quicklink.settings')->get('enable_debug_mode')) {
-      $messenger = \Drupal::messenger();
-      $messenger->addMessage('Quicklink debug mode enabled. Be sure to disable this on production.', $messenger::TYPE_WARNING);
+      $this->messenger()->addWarning($this->t('Quicklink debug mode enabled. Be sure to disable this on production.'));
     }
 
     return parent::buildForm($form, $form_state);
