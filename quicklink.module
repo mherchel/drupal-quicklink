@@ -5,6 +5,7 @@
  * Contains quicklink.module.
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -40,7 +41,7 @@ function quicklink_library_info_build() {
 /**
  * Implements hook_help().
  */
-function quicklink_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+function quicklink_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.quicklink':
       $text = file_get_contents(dirname(__FILE__) . '/README.md');
