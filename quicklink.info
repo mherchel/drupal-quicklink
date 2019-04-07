@@ -1,0 +1,5 @@
+name = Quicklink
+description = Installs Quicklink JS library to prefetch linked pages.
+core = 7.x
+package = Performance and Scalability
+configure = admin/config/development/performance/quicklink

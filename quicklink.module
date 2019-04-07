@@ -1,76 +1,228 @@
 <?php
 
 /**
- * @file
- * Contains quicklink.module.
+ * Implements hook_menu().
  */
+function quicklink_menu() {
+  $items['admin/config/development/performance/default'] = array(
+    'title' => 'Performance',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
 
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\NodeInterface;
+  $items['admin/config/development/performance/quicklink'] = array(
+    'title' => 'Quicklink Configuration',
+    'page callback' => 'drupal_get_form',
+    'page arguments'  => array('quicklink_config_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -9,
+  );
 
-/**
- * Implements hook_library_info_build().
- */
-function quicklink_library_info_build() {
-  $libraries = [];
-
-  if (file_exists(DRUPAL_ROOT . '/libraries/quicklink/dist/quicklink.umd.js')) {
-    $libraries['quicklink'] = [
-      'js' => [
-        '/libraries/quicklink/dist/quicklink.umd.js' => [
-          'minified' => TRUE,
-          'weight' => -20,
-        ],
-      ],
-    ];
-  }
-  else {
-    $libraries['quicklink'] = [
-      'js' => [
-        'https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js' => [
-          'minified' => TRUE,
-          'type' => 'external',
-          'weight' => -20,
-        ],
-      ],
-    ];
-  }
-  return $libraries;
+  return $items;
 }
 
 /**
- * Implements hook_help().
+ * Page callback: Configuration form to update module settings.
  */
-function quicklink_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    case 'help.page.quicklink':
-      $text = file_get_contents(dirname(__FILE__) . '/README.md');
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+function quicklink_config_form($form, &$form_state) {
+  $form['settings'] = [
+    '#type' => 'vertical_tabs',
+    '#attributes' => ['class' => ['quicklink']],
+  ];
+
+  // Ignore tab.
+  $form['ignore'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Prefetch Ignore Settings'),
+    '#description' => t('On this tab, specify what Quicklink should not prefetch.'),
+    '#group' => 'settings',
+  ];
+  $form['ignore']['ignore_admin_paths'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do not prefetch admin paths'),
+    '#description' => t('Highly recommended. Ignore administrative paths.'),
+    '#default_value' => variable_get('ignore_admin_paths', 1),
+  ];
+  $form['ignore']['ignore_ajax_links'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do not prefetch AJAX links'),
+    '#description' => t('Highly recommended. Ignore links that trigger AJAX behavior.'),
+    '#default_value' => variable_get('ignore_ajax_links', 1),
+  ];
+  $form['ignore']['ignore_hashes'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Ignore paths with hashes (#) in them'),
+    '#description' => t('Recommended. Prevents multiple prefetches of the same page.'),
+    '#default_value' => variable_get('ignore_hashes', 1),
+  ];
+  $form['ignore']['ignore_file_ext'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Ignore paths with file extensions'),
+    '#description' => t('Recommended. This will ignore links that end with a file extension.
+      It will match paths ending with a period followed by 1-5 characters. Querystrings are supported.'),
+    '#default_value' => variable_get('ignore_file_ext', 1),
+  ];
+  $form['ignore']['url_patterns_to_ignore'] = [
+    '#type' => 'textarea',
+    '#title' => t('URL patterns to ignore (optional)'),
+    '#description' => t('Quicklink will not fetch data if the URL contains any of these patterns. One per line.'),
+    '#default_value' => variable_get('url_patterns_to_ignore', ''),
+    '#resizable' => FALSE,
+    '#attributes' => [
+      'style' => 'max-width: 600px;',
+    ],
+  ];
+
+  // Overrides tab.
+  $form['overrides'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Optional Overrides'),
+    '#description' => t('On this tab, specify various overrides.'),
+    '#group' => 'settings',
+  ];
+  $form['overrides']['selector'] = [
+    '#type' => 'textfield',
+    '#title' => t('Override parent selector (optional)'),
+    '#description' => t('Quicklink will search this CSS selector for URLs to prefetch (ex. <code>.body-inner</code>). Defaults to the whole document.'),
+    '#maxlength' => 128,
+    '#size' => 128,
+    '#default_value' => variable_get('selector', ''),
+    '#attributes' => [
+      'style' => 'max-width: 600px;',
+    ],
+  ];
+  $form['overrides']['allowed_domains'] = [
+    '#type' => 'textarea',
+    '#title' => t('Override allowed domains (optional)'),
+    '#description' => t('List of domains to prefetch from. If empty, Quicklink will only prefetch links from the origin domain.
+      If you configure this, be sure to input the origin domain. Add <code>true</code> here to allow <em>every</em> origin.'),
+    '#default_value' => variable_get('allowed_domains', ''),
+    '#resizable' => FALSE,
+    '#attributes' => [
+      'style' => 'max-width: 600px;',
+    ],
+  ];
+  $form['overrides']['prefetch_only_paths'] = [
+    '#type' => 'textarea',
+    '#title' => t('Prefetch these paths only (overrides everything else)'),
+    '#description' => t('If enabled, will override other settings. <strong>Only these paths will be prefetched.</strong> Include the forward slash at the beginning of the path.'),
+    '#default_value' => variable_get('prefetch_only_paths', ''),
+    '#resizable' => FALSE,
+    '#attributes' => [
+      'style' => 'max-width: 600px;',
+    ],
+  ];
+
+  // When to Prefetch tab.
+  $form['when_load_library'] = [
+    '#type' => 'fieldset',
+    '#title' => t('When to Load Library'),
+    '#description' => t('On this tab, specify when the Quicklink library will be loaded.'),
+    '#group' => 'settings',
+  ];
+  $form['when_load_library']['no_load_when_authenticated'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Prefetch for anonymous users only'),
+    '#description' => t('Highly recommended. Quicklink library will not be loaded for authenticated users.'),
+    '#default_value' => variable_get('no_load_when_authenticated', 1),
+  ];
+  $form['when_load_library']['no_load_when_session'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do not prefetch during sessions'),
+    '#description' => t('Recommended. Disables loading of the Quicklink library when a PHP session has been started. Useful for modules that use sessions (e.g. Drupal Commerce shopping carts).'),
+    '#default_value' => variable_get('no_load_when_session', 1),
+  ];
+
+  $options = [];
+  $types = node_type_get_types();
+
+  foreach ($types as $type) {
+    $options[$type->type] = $type->name;
   }
-  return NULL;
+
+  $form['when_load_library']['no_load_content_types'] = [
+    '#title' => t('Do not load library on these content types:'),
+    '#type' => 'checkboxes',
+    '#options' => $options,
+    '#default_value' => variable_get('no_load_content_types', []),
+  ];
+
+  // Polyfill tab.
+  $form['polyfill'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Extended Browser Support'),
+    '#description' => t('On this tab, include support of additional browsers via polyfill.'),
+    '#group' => 'settings',
+  ];
+  $form['polyfill']['load_polyfill'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Load <em>Intersection Observer</em> polyfill'),
+    '#description' => t('This checkbox will enable loading of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" target="_blank">
+      Intersection Observer</a> polyfill from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in older browserSafari and Microsoft Edge browsers.'),
+    '#default_value' => variable_get('load_polyfill', 1),
+  ];
+
+  // Debug tab.
+  $form['debug'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Debug'),
+    '#description' => t('On this tab, enable debug logging.'),
+    '#group' => 'settings',
+  ];
+  $form['debug']['enable_debug_mode'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable debug mode'),
+    '#description' => t("Log Quicklink development information to the HTML and JavaScript console. You may need to clear Drupal's cache after changing this value."),
+    '#default_value' => variable_get('enable_debug_mode', 0),
+  ];
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+
+  if (variable_get('enable_debug_mode', 0)) {
+    drupal_set_message('Quicklink debug mode enabled. Be sure to disable this on production.', 'warning');
+  }
+
+  return $form;
+}
+
+function quicklink_config_form_submit($form, $form_state) {
+  $fieldsToSave = [
+    'ignore_admin_paths',
+    'ignore_ajax_links',
+    'ignore_hashes',
+    'ignore_file_ext',
+    'url_patterns_to_ignore',
+    'selector',
+    'allowed_domains',
+    'prefetch_only_paths',
+    'no_load_when_authenticated',
+    'no_load_when_session',
+    'no_load_content_types',
+    'load_polyfill',
+    'enable_debug_mode',
+  ];
+
+  foreach ($fieldsToSave as $value) {
+    $formValue = $form_state['values'][$value];
+    variable_set($value, $formValue);
+  }
+
 }
 
 /**
  * Implements hook_preprocess_html().
  */
-function quicklink_preprocess_html(&$variables, $hook) {
+function quicklink_preprocess_html(&$variables) {
+  $settings = [];
 
   // Load current configuration.
-  $config = \Drupal::config('quicklink.settings');
-  $selector = $config->get('selector');
+  $selector = variable_get('selector', '');
 
   // Get debug variable.
-  $debug = $config->get('enable_debug_mode');
+  $debug = variable_get('enable_debug_mode', 0);
   $debug_log = [];
 
   // Load the library unless we disable later.
@@ -83,7 +235,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
   $allowed_domains = [];
 
   // Populate and remove line returns from URL patterns to ignore.
-  foreach (explode(PHP_EOL, $config->get('url_patterns_to_ignore')) as $value) {
+  foreach (explode(PHP_EOL, variable_get('url_patterns_to_ignore', '')) as $value) {
     $pattern = str_replace("\r", '', $value);
 
     if (!empty($pattern)) {
@@ -92,7 +244,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
   }
 
   // Populate and remove line returns from allowed domains.
-  foreach (explode(PHP_EOL, $config->get('allowed_domains')) as $value) {
+  foreach (explode(PHP_EOL, variable_get('allowed_domains', '')) as $value) {
     $domain = str_replace("\r", '', $value);
 
     if (!empty($domain)) {
@@ -101,7 +253,7 @@ function quicklink_preprocess_html(&$variables, $hook) {
   }
 
   // Populate and remove line returns from "Prefetch these paths only".
-  foreach (explode(PHP_EOL, $config->get('prefetch_only_paths')) as $value) {
+  foreach (explode(PHP_EOL, variable_get('prefetch_only_paths', '')) as $value) {
     $path = str_replace("\r", '', $value);
 
     if (!empty($path)) {
@@ -110,93 +262,103 @@ function quicklink_preprocess_html(&$variables, $hook) {
   }
 
   // Check for "Ignore Hashes" option.
-  if ($config->get('ignore_hashes') == 1) {
+  if (variable_get('ignore_hashes', 1) == 1) {
     $url_patterns_to_ignore[] = '#';
     $debug_log[] = 'Quicklink will ignore URLs with hashes(#).';
   }
 
   // If "Ignore admin paths" is selected, ignore the admin paths.
-  if ($config->get('ignore_admin_paths') == 1) {
+  if (variable_get('ignore_admin_paths', 1) == 1) {
     $url_patterns_to_ignore[] = '/admin';
     $url_patterns_to_ignore[] = '/edit';
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
   // Check for "Content Types" option.
-  $nodes = array_filter(
-    \Drupal::routeMatch()->getParameters()->all(),
-    function ($param) {
-      return $param instanceof NodeInterface;
-    }
-  );
-  // We can only deal with one node. We'll assume it's the first one.
-  $node = reset($nodes);
+  $node = menu_get_object();
 
-  if (!empty($node)) {
-    $node_type = $node->bundle();
-    $no_load_content_types = $config->get('no_load_content_types');
+  if (isset($node) && !empty($node->type)) {
+    $no_load_content_types = variable_get('no_load_content_types', []);
 
-    if (array_key_exists($node_type, $no_load_content_types) && $no_load_content_types[$node_type] !== 0) {
+    if (!in_array($node->type, $no_load_content_types)) {
       $load_library = FALSE;
-      $debug_log[] = 'Library not loaded because content type "' . $node_type . '" is specified to not load library.';
+      $debug_log[] = 'Library not loaded because content type "' . $node->type . '" is specified to not load library.';
     }
   }
 
   // If user is logged in AND "Prefetch for anonymous users only" is selected,
   // do not load library.
-  if ($variables['logged_in'] && $config->get('no_load_when_authenticated') == 1) {
+  global $user;
+
+  if (isset($user) && variable_get('no_load_when_authenticated', 1) == 1 && !empty($user->uid) && $user->uid >= 1) {
     $load_library = FALSE;
     $debug_log[] = 'Library not loaded because user is authenticated.';
   }
 
   // Disable the library when a session is started.
-  if ($config->get('no_load_when_session')) {
-    /** @var \Drupal\Core\Session\SessionManager $session */
-    $session = \Drupal::getContainer()->get('session_manager');
-    if (!empty($session) && $session->isStarted()) {
+  if (variable_get('no_load_when_session', 1)) {
+    $session = drupal_session_started();
+
+    if (!empty($session)) {
       $load_library = FALSE;
       $debug_log[] = 'Library not loaded because PHP session is started.';
     }
   }
 
-  $variables['#attached']['library'][] = 'quicklink/quicklink_init';
-  $variables['#attached']['drupalSettings']['quicklink']['ignore_admin_paths'] = $config->get('ignore_admin_paths');
-  $variables['#attached']['drupalSettings']['quicklink']['ignore_ajax_links'] = $config->get('ignore_ajax_links');
-  $variables['#attached']['drupalSettings']['quicklink']['ignore_file_ext'] = $config->get('ignore_file_ext');
-  $variables['#attached']['drupalSettings']['quicklink']['debug'] = $debug;
+  $settings['ignore_admin_paths'] = variable_get('ignore_admin_paths', 1);
+  $settings['ignore_ajax_links'] = variable_get('ignore_ajax_links', 1);
+  $settings['ignore_file_ext'] = variable_get('ignore_file_ext', 1);
+  $settings['debug'] = $debug;
 
   if (!empty($url_patterns_to_ignore[0])) {
-    $variables['#attached']['drupalSettings']['quicklink']['url_patterns_to_ignore'] = $url_patterns_to_ignore;
+    $settings['url_patterns_to_ignore'] = $url_patterns_to_ignore;
     $debug_log['url_patterns_to_ignore'][] = $url_patterns_to_ignore;
   }
 
   if (!empty($selector)) {
-    $variables['#attached']['drupalSettings']['quicklink']['selector'] = $selector;
+    $settings['selector'] = $selector;
     $debug_log[] = 'Selector for Quicklink to parse: ' . $selector;
   }
 
   if (!empty($allowed_domains[0])) {
-    $variables['#attached']['drupalSettings']['quicklink']['allowed_domains'] = $allowed_domains;
+    $settings['allowed_domains'] = $allowed_domains;
     $debug_log['allowed_domains'][] = $allowed_domains;
   }
 
   if (!empty($prefetch_only_paths[0])) {
-    $variables['#attached']['drupalSettings']['quicklink']['prefetch_only_paths'] = $prefetch_only_paths;
+    $settings['prefetch_only_paths'] = $prefetch_only_paths;
     $debug_log['prefetch_only_paths'][] = $prefetch_only_paths;
   }
 
   if ($load_library) {
-    if ($config->get('load_polyfill') == 1) {
-      $variables['#attached']['library'][] = 'quicklink/quicklink_polyfill';
+    if (variable_get('load_polyfill', 1) == 1) {
+      drupal_add_js('https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver', array(
+        'type' => 'external',
+        'weight' => -100,
+      ));
       $debug_log[] = 'Intersection Observer polyfill library loaded';
     }
 
-    $variables['#attached']['library'][] = 'quicklink/quicklink';
+    // Load Quicklink library.
+    if (file_exists(DRUPAL_ROOT . '/sites/all/libraries/quicklink/quicklink.umd.js')) {
+      drupal_add_js(DRUPAL_ROOT . '/sites/all/libraries/quicklink/quicklink.umd.js', array(
+        'weight' => -20,
+      ));
+    }
+    else {
+      drupal_add_js('https://unpkg.com/quicklink@1.0.0/dist/quicklink.umd.js', array(
+        'type' => 'external',
+        'weight' => -20,
+      ));
+    }
   }
 
   if ($debug) {
-    $variables['#attached']['drupalSettings']['quicklink']['debug'] = 1;
-    $variables['#attached']['library'][] = 'quicklink/quicklink_debug';
-    $variables['#attached']['drupalSettings']['quicklink']['debug_log'] = $debug_log;
+    $settings['debug'] = 1;
+    drupal_add_css(drupal_get_path('module', 'quicklink') . '/css/quicklink-debug.css');
+    $settings['debug_log'] = $debug_log;
   }
+
+  drupal_add_js(array('quicklink' => $settings), array('type' => 'setting'));
+  drupal_add_js(drupal_get_path('module', 'quicklink') . '/js/quicklink_init.js');
 }

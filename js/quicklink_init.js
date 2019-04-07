@@ -1,5 +1,4 @@
-(function () {
-
+(function() {
   'use strict';
 
   Drupal.behaviors.quicklink = {
@@ -18,10 +17,11 @@
         for (var i = 0; i < settings.quicklink.url_patterns_to_ignore.length; i++) {
           var pattern = settings.quicklink.url_patterns_to_ignore[i];
 
-          (function (i, pattern) {
+          (function(i, pattern) {
             if (pattern.length) {
-              quicklinkConfig.ignores.push(function (uri, elem) {
-                var ruleName = 'Pattern found in href. See ignored selectors log.';
+              quicklinkConfig.ignores.push(function(uri, elem) {
+                var ruleName =
+                  'Pattern found in href. See ignored selectors log.';
                 var ruleFunc = uri.includes(pattern);
 
                 outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern);
@@ -33,9 +33,9 @@
         }
 
         if (settings.quicklink.ignore_admin_paths) {
-          quicklinkConfig.ignores.push(function (uri, elem) {
+          quicklinkConfig.ignores.push(function(uri, elem) {
             var ruleName = 'Exists in admin element container.';
-            var ruleFunc = elem.matches('#block-local-tasks-block a, .block-local-tasks-block a, #drupal-off-canvas a, #toolbar-administration a');
+            var ruleFunc = elem.matches('#overlay a, #admin-menu a, #tabs a');
 
             outputDebugInfo(ruleFunc, ruleName, uri, elem);
 
@@ -44,7 +44,7 @@
         }
 
         if (settings.quicklink.ignore_ajax_links) {
-          quicklinkConfig.ignores.push(function (uri, elem) {
+          quicklinkConfig.ignores.push(function(uri, elem) {
             var ruleName = 'Link has "use-ajax" CSS class.';
             var ruleFunc = elem.classList.contains('use-ajax');
 
@@ -53,7 +53,7 @@
             return ruleFunc;
           });
 
-          quicklinkConfig.ignores.push(function (uri, elem) {
+          quicklinkConfig.ignores.push(function(uri, elem) {
             var ruleName = 'Link has "/ajax" in url.';
             var ruleFunc = uri.includes('/ajax');
 
@@ -64,7 +64,7 @@
         }
 
         if (settings.quicklink.ignore_file_ext) {
-          quicklinkConfig.ignores.push(function (uri, elem) {
+          quicklinkConfig.ignores.push(function(uri, elem) {
             var ruleName = 'Contains file extension at end of href.';
             var ruleFunc = uri.match(/(\.[^\/]{1,5}\?)|(\.[^\/]{1,5}$)/);
 
@@ -74,7 +74,7 @@
           });
         }
 
-        quicklinkConfig.ignores.push(function (uri, elem) {
+        quicklinkConfig.ignores.push(function(uri, elem) {
           var ruleName = 'Contains noprefetch attribute.';
           var ruleFunc = elem.hasAttribute('noprefetch');
 
@@ -83,7 +83,7 @@
           return ruleFunc;
         });
 
-        quicklinkConfig.ignores.push(function (uri, elem) {
+        quicklinkConfig.ignores.push(function(uri, elem) {
           var ruleName = 'Contains download attribute.';
           var ruleFunc = elem.hasAttribute('download');
 
@@ -92,8 +92,8 @@
           return ruleFunc;
         });
 
-        quicklinkConfig.origins = (settings.quicklink.allowed_domains) ? settings.quicklink.allowed_domains : false;
-        quicklinkConfig.urls = (settings.quicklink.prefetch_only_paths) ? settings.quicklink.prefetch_only_paths : false;
+        quicklinkConfig.origins = settings.quicklink.allowed_domains ? settings.quicklink.allowed_domains : false;
+        quicklinkConfig.urls = settings.quicklink.prefetch_only_paths ? settings.quicklink.prefetch_only_paths : false;
       }
 
       function outputDebugInfo(ruleFunc, ruleName, uri, elem, pattern) {
@@ -115,7 +115,7 @@
             thisLog.urlPattern = urlPattern;
           }
 
-          (function (thisLog) {
+          (function(thisLog) {
             settings.quicklink.ignoredSelectorsLog.push(thisLog);
           })(thisLog);
         }
@@ -137,7 +137,7 @@
         hydrateQuicklinkConfig();
       }
 
-      settings.quicklink.quicklinkConfig.el = (settings.quicklink.selector) ? context.querySelector(settings.quicklink.selector) : context;
+      settings.quicklink.quicklinkConfig.el = settings.quicklink.selector ? context.querySelector(settings.quicklink.selector) : context;
 
       if (debug) {
         console.info('Quicklink config object', settings.quicklink.quicklinkConfig); // eslint-disable-line no-console
@@ -148,6 +148,6 @@
       if (loadQuicklink()) {
         quicklink(settings.quicklink.quicklinkConfig);
       }
-    }
+    },
   };
 })();
