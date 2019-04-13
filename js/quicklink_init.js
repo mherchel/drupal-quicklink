@@ -35,7 +35,7 @@
         if (settings.quicklink.ignore_admin_paths) {
           quicklinkConfig.ignores.push(function (uri, elem) {
             var ruleName = 'Exists in admin element container.';
-            var ruleFunc = elem.matches('#overlay a, #admin-menu a, #tabs a');
+            var ruleFunc = elem.matches('#toolbar a, #overlay a, #admin-menu a, #tabs a');
 
             outputDebugInfo(ruleFunc, ruleName, uri, elem);
 
