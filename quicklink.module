@@ -171,7 +171,7 @@ function quicklink_config_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Load <em>Intersection Observer</em> polyfill'),
     '#description' => t('This checkbox will enable loading of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" target="_blank">
-      Intersection Observer</a> polyfill from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in older browserSafari and Microsoft Edge browsers.'),
+      Intersection Observer</a> polyfill from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in older versions of Safari and Microsoft Edge browsers.'),
     '#default_value' => variable_get('quicklink_load_polyfill', 1),
   ];
 
