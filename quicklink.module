@@ -367,7 +367,7 @@ function quicklink_preprocess_html(&$variables) {
 
     // Load Quicklink library.
     if (file_exists(DRUPAL_ROOT . '/sites/all/libraries/quicklink/quicklink.umd.js')) {
-      drupal_add_js(DRUPAL_ROOT . '/sites/all/libraries/quicklink/quicklink.umd.js', array(
+      drupal_add_js(base_path() . 'sites/all/libraries/quicklink/quicklink.umd.js', array(
         'weight' => -20,
       ));
     }
