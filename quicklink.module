@@ -280,7 +280,7 @@ function quicklink_preprocess_html(&$variables) {
   if (isset($node) && !empty($node->type)) {
     $no_load_content_types = variable_get('quicklink_no_load_content_types', []);
 
-    if (!in_array($node->type, $no_load_content_types)) {
+    if (in_array($node->type, $no_load_content_types) && $no_load_content_types[$node->type]) {
       $load_library = FALSE;
       $debug_log[] = 'Library not loaded because content type "' . $node->type . '" is specified to not load library.';
     }
