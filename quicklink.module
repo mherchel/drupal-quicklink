@@ -133,6 +133,18 @@ function quicklink_config_form($form, &$form_state) {
     '#description' => t('Recommended. Disables loading of the Quicklink library when a PHP session has been started. Useful for modules that use sessions (e.g. Drupal Commerce shopping carts).'),
     '#default_value' => variable_get('quicklink_no_load_when_session', 1),
   ];
+  $form['when_load_library']['quicklink_no_load_without_page_cache'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do not prefetch if page caching for anonymous users is disabled'),
+    '#description' => t('Highly recommended. Disables loading of the Quicklink library when page caching for anonymous users is disabled.'),
+    '#default_value' => variable_get('quicklink_no_load_without_page_cache', 1),
+  ];
+  $form['when_load_library']['quicklink_no_load_without_block_cache'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do not prefetch if block caching is disabled'),
+    '#description' => t('Highly recommended. Disables loading of the Quicklink library when block caching is disabled.'),
+    '#default_value' => variable_get('quicklink_no_load_without_block_cache', 1),
+  ];
 
   $options = [];
   $types = node_type_get_types();
@@ -200,6 +212,8 @@ function quicklink_config_form_submit($form, $form_state) {
     'quicklink_prefetch_only_paths',
     'quicklink_no_load_when_authenticated',
     'quicklink_no_load_when_session',
+    'quicklink_no_load_without_page_cache',
+    'quicklink_no_load_without_block_cache',
     'quicklink_no_load_content_types',
     'quicklink_load_polyfill',
     'quicklink_enable_debug_mode',
@@ -303,6 +317,18 @@ function quicklink_preprocess_html(&$variables) {
       $load_library = FALSE;
       $debug_log[] = 'Library not loaded because PHP session is started.';
     }
+  }
+
+  // Disable the library if page caching is disabled.
+  if (variable_get('quicklink_no_load_without_page_cache', 1) && !variable_get('cache', 0)) {
+    $load_library = FALSE;
+    $debug_log[] = 'Library not loaded because Drupal page caching is disabled.';
+  }
+
+  // Disable the library if block caching is disabled.
+  if (variable_get('quicklink_no_load_without_block_cache', 1) && !variable_get('block_cache', 0)) {
+    $load_library = FALSE;
+    $debug_log[] = 'Library not loaded because Drupal block caching is disabled.';
   }
 
   $settings['ignore_admin_paths'] = variable_get('quicklink_ignore_admin_paths', 1);
