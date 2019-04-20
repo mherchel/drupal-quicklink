@@ -119,6 +119,11 @@ function quicklink_preprocess_html(&$variables, $hook) {
   if ($config->get('ignore_admin_paths') == 1) {
     $url_patterns_to_ignore[] = '/admin';
     $url_patterns_to_ignore[] = '/edit';
+
+    // If elements match these selector pattern, they will not be prefetched.
+    $admin_link_container_patterns = ['#block-local-tasks-block a', '.block-local-tasks-block a', '#drupal-off-canvas a', '#toolbar-administration a'];
+
+    $variables['#attached']['drupalSettings']['quicklink']['admin_link_container_patterns'] = $admin_link_container_patterns;
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
