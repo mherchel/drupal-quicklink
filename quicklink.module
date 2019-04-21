@@ -156,9 +156,8 @@ function quicklink_preprocess_html(&$variables, $hook) {
 
   // Disable the library when a session is started.
   if ($config->get('no_load_when_session')) {
-    /** @var \Drupal\Core\Session\SessionManager $session */
-    $session = \Drupal::getContainer()->get('session_manager');
-    if (!empty($session) && $session->isStarted()) {
+    $session_configuration = \Drupal::getContainer()->get('session_configuration');
+    if ($session_configuration->hasSession(\Drupal::request())) {
       $load_library = FALSE;
       $debug_log[] = 'Library not loaded because PHP session is started.';
     }

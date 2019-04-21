@@ -1,5 +1,4 @@
 # Schema for the configuration files of the Quicklink module.
-
 quicklink.settings:
   type: config_entity
   label: 'Quicklink Configuration'
