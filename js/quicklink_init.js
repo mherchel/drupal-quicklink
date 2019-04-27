@@ -33,9 +33,11 @@
         }
 
         if (settings.quicklink.ignore_admin_paths) {
+          var adminLinkContainerPatterns = settings.quicklink.admin_link_container_patterns.join();
+
           quicklinkConfig.ignores.push(function (uri, elem) {
             var ruleName = 'Exists in admin element container.';
-            var ruleFunc = elem.matches('#toolbar a, #overlay a, #admin-menu a, #tabs a');
+            var ruleFunc = elem.matches(adminLinkContainerPatterns);
 
             outputDebugInfo(ruleFunc, ruleName, uri, elem);
 

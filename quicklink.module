@@ -285,6 +285,11 @@ function quicklink_preprocess_html(&$variables) {
   if (variable_get('quicklink_ignore_admin_paths', 1) == 1) {
     $url_patterns_to_ignore[] = '/admin';
     $url_patterns_to_ignore[] = '/edit';
+
+    // If elements match these selector pattern, they will not be prefetched.
+    $admin_link_container_patterns = ['#toolbar a', '#overlay a', '#admin-menu a', '#tabs a'];
+
+    $settings['admin_link_container_patterns'] = $admin_link_container_patterns;
     $debug_log[] = 'Quicklink will ignore admin URL patterns.';
   }
 
