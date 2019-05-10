@@ -172,8 +172,7 @@ function quicklink_config_form($form, &$form_state) {
   $form['polyfill']['quicklink_load_polyfill'] = array(
     '#type' => 'checkbox',
     '#title' => t('Load <em>Intersection Observer</em> polyfill'),
-    '#description' => t('This checkbox will enable loading of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API" target="_blank">
-      Intersection Observer</a> polyfill from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in older versions of Safari and Microsoft Edge browsers.'),
+    '#description' => t('This checkbox will enable loading of necessary polyfills from <a href="https://polyfill.io" target="_blank">polyfill.io</a>. This will enable usage of Quicklink in IE11 and older versions modern browsers.'),
     '#default_value' => variable_get('quicklink_load_polyfill', 1),
   );
 
@@ -365,7 +364,7 @@ function quicklink_preprocess_html(&$variables) {
 
   if ($load_library) {
     if (variable_get('quicklink_load_polyfill', 1) == 1) {
-      drupal_add_js('https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver', array(
+      drupal_add_js('https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver%2CIntersectionObserverEntry%2CURL%2CObject.assign%2CArray.from%2CArray.prototype.includes%2CString.prototype.includes%2CElement.prototype.matches%2CPromise%2CPromise.prototype.finally', array(
         'type' => 'external',
         'weight' => -100,
       ));
